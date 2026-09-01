@@ -87,7 +87,11 @@
   --card-foreground: 210 43% 9%;
   --popover: 0 0% 100%;
   --popover-foreground: 210 43% 9%;
-  --primary: 18 100% 50%;
+  /* Darkened from 18 100% 50% (WCAG fix): white --primary-foreground on
+     the original value was ~3.33:1, failing AA (4.5:1) for normal text on
+     bg-primary/text-primary-foreground buttons and badges. 18 100% 40%
+     keeps the brand hue/saturation and reaches 4.95:1. */
+  --primary: 18 100% 40%;
   --primary-foreground: 0 0% 100%;
   --secondary: 210 40% 96.1%;
   --secondary-foreground: 222.2 47.4% 11.2%;
@@ -116,7 +120,11 @@
   --card-foreground: 210 20% 98%;
   --popover: 210 40% 12%;
   --popover-foreground: 210 20% 98%;
-  --primary: 18 100% 55%;
+  /* Darkened from 18 100% 55% (WCAG fix): white --primary-foreground on
+     the original value was ~3.05:1, failing AA. Same 18 100% 40% as light —
+     the white-text contrast requirement doesn't depend on theme, and this
+     keeps light/dark buttons visually consistent; reaches 4.95:1. */
+  --primary: 18 100% 40%;
   --primary-foreground: 0 0% 100%;
   --secondary: 210 33% 17%;
   --secondary-foreground: 210 20% 98%;

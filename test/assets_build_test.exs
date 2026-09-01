@@ -60,4 +60,20 @@ defmodule LiveReactExamples.AssetsBuildTest do
       assert css =~ token, "missing #{token}; card/tabs/button components reference it"
     end
   end
+
+  test "--primary meets WCAG AA contrast with white --primary-foreground", %{css: css} do
+    # 18 100% 50% (light) / 18 100% 55% (dark) measured ~3.3:1 and ~3.1:1
+    # against white text -- below the 4.5:1 AA minimum for normal text on
+    # bg-primary/text-primary-foreground buttons and badges. 18 100% 40%
+    # keeps the brand hue/saturation and measures 4.95:1 in both themes.
+    # Pinning the emitted value here catches a future palette edit that
+    # silently reintroduces the failure.
+    primary_occurrences = css |> String.split("--primary:") |> length() |> Kernel.-(1)
+    assert primary_occurrences == 2, "expected --primary in both :root and .dark"
+
+    assert css
+           |> String.split("--primary:")
+           |> Enum.drop(1)
+           |> Enum.all?(&String.starts_with?(&1, "18 100% 40%"))
+  end
 end
