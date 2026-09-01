@@ -75,15 +75,22 @@ Two things to know about this mode:
 The design tokens live in `assets/css/app.css`. Tailwind 4 reads the config
 from CSS — there is no `tailwind.config.js`.
 
-- `@theme` holds the fixed duotone palette: `--color-brand` (Phoenix orange)
-  and `--color-client` (React cyan). Code block headers and diagrams are
-  coloured by this rule.
-- `:root` and `.dark` hold the semantic layer — `--surface`, `--text`,
-  `--edge` and the shadcn-compatible aliases the card/tabs/button components
-  consume, including `--primary`, the interactive fill. `--primary` is
-  deliberately darker than `--color-brand` so white text on it clears the
-  4.5:1 WCAG AA contrast minimum. Components reference these, never the
-  palette directly.
+- `@theme static` holds the fixed duotone palette: `--color-brand` (Phoenix
+  orange) and `--color-client` (React cyan). Code block headers and diagrams
+  are coloured by this rule. `static` forces Tailwind to keep emitting it
+  even though not every value has a call site yet.
+- a plain `@theme` (no `static`) maps `--color-primary`, `--color-card`,
+  `--color-ring` and their siblings to the `hsl(var(--x))` custom properties
+  below — it's what regenerates the `bg-card` / `text-card-foreground` /
+  `ring-ring` utilities the old `tailwind.config.js` used to produce, so
+  deleting it unstyles the whole site. Left off `static` so unused aliases
+  still tree-shake.
+- `:root` and `.dark` hold the values that actually flip per theme —
+  `--surface`, `--text`, `--edge` and the shadcn-compatible HSL aliases
+  (`--background`, `--card`, `--primary`, …) the card/tabs/button components
+  consume. `--primary`, the interactive fill, is deliberately darker than
+  `--color-brand` so white text on it clears the 4.5:1 WCAG AA contrast
+  minimum. Components reference these, never the palette directly.
 
 Dark mode is a `.dark` class on `<html>`, set before first paint by an inline
 script in the root layout and toggled by the header control.
