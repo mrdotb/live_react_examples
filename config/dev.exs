@@ -9,7 +9,7 @@ import Config
 config :live_react_examples, LiveReactExamplesWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4010],
+  http: [ip: {127, 0, 0, 1}, port: 3200],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
@@ -58,7 +58,7 @@ config :live_react_examples, LiveReactExamplesWeb.Endpoint,
   ]
 
 config :live_react,
-  vite_host: "http://localhost:4011",
+  vite_host: "http://localhost:3300",
   ssr_module: LiveReact.SSR.ViteJS,
   ssr: true
 

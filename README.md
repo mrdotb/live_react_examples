@@ -37,7 +37,7 @@ mix setup      # deps.get + npm install + build client and SSR bundles
 mix phx.server
 ```
 
-Then visit <http://localhost:4000>.
+Then visit <http://localhost:3200>.
 
 ## Developing against a local LiveReact checkout
 

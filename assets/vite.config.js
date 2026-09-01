@@ -11,7 +11,7 @@ export default defineConfig(({ command }) => {
 
   return {
     server: {
-      port: parseInt(process.env.VITE_PORT) || 4011,
+      port: parseInt(process.env.VITE_PORT) || 3300,
       host: '0.0.0.0', // listen on all network interfaces
       cors: true, // enable CORS for all origins in development
       strictPort: true, // fail if port is already in use
