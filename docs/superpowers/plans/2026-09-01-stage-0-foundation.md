@@ -19,6 +19,9 @@
 - Do not touch `lib/live_react_examples.ex`, `github-code.jsx`, or the `demo/1` component. They are Stage 1's to delete, and the current layout still calls `demo/1`.
 - Do not remove `simple_form`, `input`, `label` or `error` from `core_components.ex` — `hybrid_form.ex:8-9` renders them.
 - Dev server runs on `localhost:3200`, Vite on `3300`.
+- `SiteComponents` must NOT `use LiveReactExamplesWeb, :html` — `html_helpers`
+  imports it, so that is a compile cycle. It declares `use Phoenix.VerifiedRoutes`
+  explicitly instead.
 
 ---
 
@@ -183,9 +186,15 @@ Replace the whole of `assets/css/app.css`:
 }
 ```
 
-Note: the `--background`, `--card`, `--border` etc. custom properties that the
-old `@layer base` block defined are added in Task 2. Between Task 1 and Task 2
-the site will render unstyled in places; that is expected and Task 2 closes it.
+Then append the existing `:root` block **verbatim**, exactly as it appears in
+the current `app.css` today (the `--background: 0 0% 100%;` … `--radius: 0.5rem;`
+list, wrapped in `@layer base { :root { … } }`). Task 2 replaces it with the
+light/dark semantic layer.
+
+Keeping it is deliberate: `card`, `tabs` and `button` read `hsl(var(--card))`
+and friends, so dropping the block here would leave the site unstyled between
+Task 1 and Task 2, against the Global Constraint that every task leaves every
+page rendering.
 
 - [ ] **Step 5: Delete the legacy config**
 
@@ -383,7 +392,9 @@ defmodule LiveReactExamplesWeb.SiteComponentsTest do
     head = html |> String.split("</head>") |> hd()
     assert head =~ "localStorage"
     assert head =~ "prefers-color-scheme"
-    assert head =~ "classList.add"
+    # toggle, not add: the script must also clear the class when the stored
+    # preference is light but the system prefers dark.
+    assert head =~ "classList.toggle"
   end
 end
 ```
@@ -406,6 +417,14 @@ defmodule LiveReactExamplesWeb.SiteComponents do
   are specific to this site's layout.
   """
   use Phoenix.Component
+
+  # Verified routes are declared explicitly rather than via
+  # `use LiveReactExamplesWeb, :html`: html_helpers imports this module, so
+  # using it here would be a compile cycle.
+  use Phoenix.VerifiedRoutes,
+    endpoint: LiveReactExamplesWeb.Endpoint,
+    router: LiveReactExamplesWeb.Router,
+    statics: LiveReactExamplesWeb.static_paths()
 
   import LiveReactExamplesWeb.CoreComponents, only: [icon: 1]
 
