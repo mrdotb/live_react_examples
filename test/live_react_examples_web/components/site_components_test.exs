@@ -22,13 +22,29 @@ defmodule LiveReactExamplesWeb.SiteComponentsTest do
     # toggle, not add: the script must also clear the class when the stored
     # preference is light but the system prefers dark.
     assert head =~ "classList.toggle"
+
+    # The no-flash guarantee depends on this script running synchronously
+    # during head parsing. `type="module"` scripts are deferred, so if this
+    # ever became a module the theme would flash on first paint.
+    theme_script_tag =
+      head
+      |> String.split("<script")
+      |> Enum.find(&(&1 =~ "toggleTheme"))
+      |> String.split(">", parts: 2)
+      |> hd()
+
+    refute theme_script_tag =~ ~s(type="module")
   end
 
   test "site_header carries the primary nav and the toggle" do
     html = render_component(&site_header/1, %{})
 
-    assert html =~ "/examples" or html =~ "/simple"
+    assert html =~ ~s(href="/simple")
+    assert html =~ "Examples"
+    assert html =~ "hexdocs.pm/live_react"
+    assert html =~ "Docs"
     assert html =~ "github.com/mrdotb/live_react"
+    assert html =~ "GitHub"
     assert html =~ ~s(id="theme-toggle")
   end
 

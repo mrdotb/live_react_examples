@@ -60,7 +60,7 @@ defmodule LiveReactExamplesWeb.SiteComponents do
 
     ~H"""
     <header class={[
-      "sticky top-0 z-50 h-14 w-full overflow-hidden",
+      "sticky top-0 z-50 h-14 w-full",
       "border-b border-[color:var(--edge)]",
       "bg-[color:var(--surface)]/80 backdrop-blur",
       @class

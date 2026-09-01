@@ -36,7 +36,7 @@
      removed tailwind.config.js `theme.extend.colors` 1:1 — without this,
      Tailwind 4 has no `--color-*` token to generate those utilities from,
      and the card/tabs/button/root-layout markup that uses them renders
-     unstyled. Task 2 replaces this with the light/dark semantic layer.
+     unstyled.
      Left on plain @theme (not `static`) so these tree-shake normally like
      the values they replace did — if the last usage of one is ever
      removed, it should disappear from the build, not linger forever. */
@@ -72,9 +72,12 @@
    the raw palette, so a theme change is a one-place edit.
 
    The --background/--card/--primary… aliases are kept in the HSL triple form
-   the existing card, tabs and button components already consume via
-   hsl(var(--x)); removing them would silently unstyle those components. */
+   because the @theme block above feeds them into `hsl(var(--x))` to generate
+   the bg-card/text-muted-foreground/ring-ring/… utilities; removing them
+   would silently unstyle every component that uses those utilities. */
 :root {
+  color-scheme: light;
+
   --surface: var(--color-paper);
   --surface-raised: #ffffff;
   --text: var(--color-ink);
@@ -108,6 +111,8 @@
 }
 
 .dark {
+  color-scheme: dark;
+
   --surface: var(--color-ink);
   --surface-raised: #111f2e;
   --text: var(--color-paper);
