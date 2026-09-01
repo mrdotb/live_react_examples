@@ -28,13 +28,18 @@
   --color-client: #61DAFB;
   --color-ink: #0B1521;
   --color-paper: #FBFCFD;
+}
 
+@theme {
   /* Semantic color utilities (bg-card, text-muted-foreground, ring-ring, …)
      reading the HSL custom properties in the :root block below. Mirrors the
      removed tailwind.config.js `theme.extend.colors` 1:1 — without this,
      Tailwind 4 has no `--color-*` token to generate those utilities from,
      and the card/tabs/button/root-layout markup that uses them renders
-     unstyled. Task 2 replaces this with the light/dark semantic layer. */
+     unstyled. Task 2 replaces this with the light/dark semantic layer.
+     Left on plain @theme (not `static`) so these tree-shake normally like
+     the values they replace did — if the last usage of one is ever
+     removed, it should disappear from the build, not linger forever. */
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));

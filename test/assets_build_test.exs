@@ -34,4 +34,17 @@ defmodule LiveReactExamples.AssetsBuildTest do
   test "no legacy tailwind js config remains" do
     refute File.exists?(Path.expand("../assets/tailwind.config.js", __DIR__))
   end
+
+  test "semantic color utilities used by core_components still resolve", %{css: css} do
+    # Guards the @theme mapping (--color-card, --color-muted, etc. -> hsl(var(--card)),
+    # ...) that replaced tailwind.config.js's theme.extend.colors. Assert on the
+    # actual generated class rules, not just the presence of the --color-* tokens,
+    # so this fails if the mapping stops producing utilities the app depends on.
+    assert css =~ ~r/\.bg-card\{[^}]*background-color:\s*var\(--color-card\)/
+    assert css =~ ~r/\.text-card-foreground\{[^}]*color:\s*var\(--color-card-foreground\)/
+    assert css =~ ~r/\.bg-muted\{[^}]*background-color:\s*var\(--color-muted\)/
+    assert css =~ ~r/\.bg-background\{[^}]*background-color:\s*var\(--color-background\)/
+    assert css =~ ~r/\.bg-primary\{[^}]*background-color:\s*var\(--color-primary\)/
+    assert css =~ ~r/ring-ring[^{]*\{[^}]*--tw-ring-color:\s*var\(--color-ring\)/
+  end
 end
