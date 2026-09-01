@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="[scrollbar-gutter:stable]">
+<html lang="en" class="[scrollbar-gutter:stable]" style="color-scheme: light dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,8 +12,26 @@
       <script type="module" phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
       </script>
     </LiveReact.Reload.vite_assets>
+    <script>
+      // Runs before <body> paints. Sets the theme class synchronously so the
+      // page never renders in the wrong theme and then snaps to the right one.
+      (function () {
+        var stored = null;
+        try { stored = localStorage.getItem("theme"); } catch (_) {}
+        var dark =
+          stored === "dark" ||
+          (stored === null &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+
+        window.__toggleTheme = function () {
+          var isDark = document.documentElement.classList.toggle("dark");
+          try { localStorage.setItem("theme", isDark ? "dark" : "light"); } catch (_) {}
+        };
+      })();
+    </script>
   </head>
-  <body class="min-h-screen bg-background font-sans antialiased">
+  <body class="min-h-screen font-sans antialiased">
     {@inner_content}
   </body>
 </html>

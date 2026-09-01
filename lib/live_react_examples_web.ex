@@ -85,6 +85,7 @@ defmodule LiveReactExamplesWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import LiveReactExamplesWeb.CoreComponents
+      import LiveReactExamplesWeb.SiteComponents
 
       import LiveReact
 

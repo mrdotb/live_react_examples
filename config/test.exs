@@ -16,3 +16,12 @@ config :phoenix, :plug_init_mode, :runtime
 # Enable helpful, but potentially expensive runtime checks
 config :phoenix_live_view,
   enable_expensive_runtime_checks: true
+
+# Server-side rendering shells out to a Node process whose ESM `import`
+# resolution needs a `node_modules` next to priv/react-components/server.js.
+# Nothing in the build pipeline populates that directory (see
+# assets/package.json's build-server script and the Dockerfile), so SSR is a
+# pre-existing gap in every environment, not something introduced here.
+# Disabling it for tests keeps the suite deterministic without requiring a
+# full Vite/Node build; no test asserts on SSR output.
+config :live_react, ssr: false
