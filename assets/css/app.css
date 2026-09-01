@@ -1,8 +1,66 @@
 @import "tailwindcss";
 
-/* using legacy config file */
-/* https://tailwindcss.com/docs/upgrade-guide#using-a-javascript-config-file */
-@config "../tailwind.config.js";
+/* Tailwind 4 scans these for class names (replaces `content` in the JS config) */
+@source "../js";
+@source "../react-components";
+@source "../../lib/live_react_examples_web";
+
+@plugin "@tailwindcss/forms";
+@plugin "../heroicons.js";
+
+/* Dark mode is an explicit class on <html>, set before first paint. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* LiveView loading-state variants */
+@custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
+@custom-variant phx-submit-loading (.phx-submit-loading&, .phx-submit-loading &);
+@custom-variant phx-change-loading (.phx-change-loading&, .phx-change-loading &);
+
+/* `static` forces Tailwind to always emit these as CSS variables even
+   though nothing in the current templates uses `client`/`ink`/`paper` yet
+   (Tailwind 4 tree-shakes unused theme values by default) — later tasks
+   consume them as text-client, bg-ink, etc. */
+@theme static {
+  /* Duotone palette. These encode which side of the wire something is on:
+     orange for the server (LiveView, handle_event), cyan for the client
+     (React, local state). Used by code block headers and diagrams. */
+  --color-brand: #FD4F00;
+  --color-client: #61DAFB;
+  --color-ink: #0B1521;
+  --color-paper: #FBFCFD;
+
+  /* Semantic color utilities (bg-card, text-muted-foreground, ring-ring, …)
+     reading the HSL custom properties in the :root block below. Mirrors the
+     removed tailwind.config.js `theme.extend.colors` 1:1 — without this,
+     Tailwind 4 has no `--color-*` token to generate those utilities from,
+     and the card/tabs/button/root-layout markup that uses them renders
+     unstyled. Task 2 replaces this with the light/dark semantic layer. */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --animate-border-beam: border-beam calc(var(--duration) * 1s) infinite linear;
+
+  @keyframes border-beam {
+    100% {
+      offset-distance: 100%;
+    }
+  }
+}
 
 @layer base {
   :root {
