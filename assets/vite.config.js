@@ -19,14 +19,30 @@ export default defineConfig(({ command }) => {
     base: isDev ? undefined : "/assets",
     publicDir: "static",
     plugins: [react(), liveReactPlugin(), tailwindcss()],
-    ssr: {
-      // Bundle every non-builtin dependency into the SSR entrypoint so
-      // priv/react-components/server.js is self-contained: it must run
-      // with no node_modules reachable from priv/ (see mix.exs release
-      // steps, which never copy assets/node_modules, and Docker's runner
-      // stage, which only copies the release).
-      noExternal: true,
-    },
+    // SSR is resolved two completely different ways, so this config is split.
+    //
+    // In dev, LiveReact.SSR.ViteJS renders through the Vite dev server, which
+    // resolves imports from assets/node_modules. React must stay EXTERNAL
+    // there: Vite's dev module runner evaluates inlined modules as ESM, and
+    // react/jsx-dev-runtime.js is CJS, so bundling it raises
+    // "ReferenceError: module is not defined".
+    //
+    // In the build, LiveReact.SSR.NodeJS runs priv/react-components/server.js
+    // directly under Node, with no node_modules reachable from priv/ — the
+    // release never copies assets/node_modules and Docker's runner stage only
+    // copies the release. So the bundle must be self-contained.
+    ssr: isDev
+      ? {
+          external: [
+            "react",
+            "react-dom",
+            "react-dom/server",
+            "react/jsx-runtime",
+            "react/jsx-dev-runtime",
+          ],
+          noExternal: ["live_react"],
+        }
+      : { noExternal: true },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./react-components"),
