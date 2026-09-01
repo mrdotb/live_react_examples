@@ -35,6 +35,10 @@ defmodule LiveReactExamplesWeb.Router do
     live "/stream-demo", LiveStreamDemo
   end
 
+  scope "/", LiveReactExamplesWeb do
+    get "/up", PageController, :up
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", LiveReactExamplesWeb do
   #   pipe_through :api

@@ -4,7 +4,7 @@ The demo application for [LiveReact](https://github.com/mrdotb/live_react) — R
 components inside Phoenix LiveView, with SSR, end-to-end reactivity and slot
 interoperability.
 
-Live demo: <https://live-react-examples.fly.dev/simple>
+Live demo: <https://live-react.mrdotb.com/simple>
 
 ## What's in here
 
@@ -72,7 +72,20 @@ Two things to know about this mode:
 
 ## Deployment
 
-Pushes to `main` build a Docker image and publish it to
-`ghcr.io/mrdotb/live-react-examples` (see `.github/workflows/publish.yml`). The
-app runs on Fly.io as `live-react-examples`; `fly deploy` picks up `fly.toml`
-and the `Dockerfile`.
+Pushing a `v*` tag builds a Docker image and publishes it to the public
+`ghcr.io/mrdotb/live-react-examples` (see `.github/workflows/publish.yml`),
+tagged `vX.Y.Z`, `vX.Y` and `latest`:
+
+```bash
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+The app is served at <https://live-react.mrdotb.com> from a k3s cluster, deployed
+by Flux from the `ironforge-scaleway` GitOps repo under
+`kubernetes/apps-stages/stage-5/default/live-react-examples`. It runs as a single
+replica behind nginx-ingress with a cert-manager certificate, takes `PHX_HOST`,
+`SECRET_KEY_BASE` and `PORT` from its environment, and answers the liveness and
+readiness probes on `/up`.
+
+The manifest pins the image tag, so deploying a new version means bumping `tag:`
+in its `helm-release.yaml` to match the tag you just pushed.

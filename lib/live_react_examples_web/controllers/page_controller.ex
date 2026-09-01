@@ -5,6 +5,11 @@ defmodule LiveReactExamplesWeb.PageController do
     redirect(conn, to: ~p"/simple")
   end
 
+  # Liveness/readiness probe. Kept out of the browser pipeline so it stays cheap.
+  def up(conn, _params) do
+    send_resp(conn, 200, "OK")
+  end
+
   def simple(conn, _params) do
     render(conn, :simple, demo: :simple)
   end
