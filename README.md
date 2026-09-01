@@ -70,6 +70,24 @@ Two things to know about this mode:
 - The local library pulls in dependencies the released package doesn't have, so
   `mix deps.get` will add entries to `mix.lock`. Don't commit those.
 
+## Theming
+
+The design tokens live in `assets/css/app.css`. Tailwind 4 reads the config
+from CSS — there is no `tailwind.config.js`.
+
+- `@theme` holds the fixed duotone palette: `--color-brand` (Phoenix orange)
+  and `--color-client` (React cyan). Code block headers and diagrams are
+  coloured by this rule.
+- `:root` and `.dark` hold the semantic layer — `--surface`, `--text`,
+  `--edge` and the shadcn-compatible aliases the card/tabs/button components
+  consume, including `--primary`, the interactive fill. `--primary` is
+  deliberately darker than `--color-brand` so white text on it clears the
+  4.5:1 WCAG AA contrast minimum. Components reference these, never the
+  palette directly.
+
+Dark mode is a `.dark` class on `<html>`, set before first paint by an inline
+script in the root layout and toggled by the header control.
+
 ## Deployment
 
 Pushing a `v*` tag builds a Docker image and publishes it to the public
