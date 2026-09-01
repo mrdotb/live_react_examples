@@ -47,4 +47,17 @@ defmodule LiveReactExamples.AssetsBuildTest do
     assert css =~ ~r/\.bg-primary\{[^}]*background-color:\s*var\(--color-primary\)/
     assert css =~ ~r/ring-ring[^{]*\{[^}]*--tw-ring-color:\s*var\(--color-ring\)/
   end
+
+  test "semantic tokens are defined for both themes", %{css: css} do
+    assert css =~ "--surface"
+    assert css =~ "--text-muted"
+    # the dark variant must actually emit a rule, not just be declared
+    assert css =~ ".dark"
+  end
+
+  test "shadcn aliases the existing components rely on still resolve", %{css: css} do
+    for token <- ~w(--background --foreground --card --muted-foreground --border --ring --radius) do
+      assert css =~ token, "missing #{token}; card/tabs/button components reference it"
+    end
+  end
 end

@@ -67,27 +67,71 @@
   }
 }
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
-  }
+/* The semantic layer. @theme holds the fixed palette; these flip per theme,
+   so they are ordinary custom properties. Components reference these, never
+   the raw palette, so a theme change is a one-place edit.
+
+   The --background/--card/--primary… aliases are kept in the HSL triple form
+   the existing card, tabs and button components already consume via
+   hsl(var(--x)); removing them would silently unstyle those components. */
+:root {
+  --surface: var(--color-paper);
+  --surface-raised: #ffffff;
+  --text: var(--color-ink);
+  --text-muted: #5b6b7c;
+  --edge: #e3e8ee;
+
+  --background: 210 20% 99%;
+  --foreground: 210 43% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 210 43% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 210 43% 9%;
+  --primary: 18 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 210 15% 42%;
+  --accent: 194 95% 68%;
+  --accent-foreground: 210 43% 9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 210 20% 91%;
+  --input: 210 20% 91%;
+  --ring: 18 100% 50%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --surface: var(--color-ink);
+  --surface-raised: #111f2e;
+  --text: var(--color-paper);
+  --text-muted: #8ea1b4;
+  --edge: #1e2f42;
+
+  --background: 210 48% 8%;
+  --foreground: 210 20% 98%;
+  --card: 210 40% 12%;
+  --card-foreground: 210 20% 98%;
+  --popover: 210 40% 12%;
+  --popover-foreground: 210 20% 98%;
+  --primary: 18 100% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 33% 17%;
+  --secondary-foreground: 210 20% 98%;
+  --muted: 210 33% 17%;
+  --muted-foreground: 210 16% 65%;
+  --accent: 194 95% 68%;
+  --accent-foreground: 210 43% 9%;
+  --destructive: 0 62.8% 45%;
+  --destructive-foreground: 210 20% 98%;
+  --border: 210 30% 20%;
+  --input: 210 30% 20%;
+  --ring: 194 95% 68%;
+}
+
+body {
+  background-color: var(--surface);
+  color: var(--text);
 }
