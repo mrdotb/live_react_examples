@@ -29,7 +29,7 @@ breaking change of the release.
 Underneath that, the presentation has no design system: no dark mode, a flat
 sidebar split into "Dead Views 💀" and "LiveViews 🔄" with no active state and
 no explanation of the distinction, Tailwind 4 driven through a legacy JS config,
-three syntax highlighters installed where one is used, and ~500 lines of unused
+three syntax highlighters installed where one is used, and ~200 lines of unused
 Phoenix scaffolding in `core_components.ex`.
 
 ## Goals
@@ -120,10 +120,13 @@ falls back to `prefers-color-scheme`. A header toggle writes the preference.
 - the page body
 - a footer — links to the library, hex docs, the author
 
-**Pruning.** `core_components.ex` loses `modal`, `simple_form`, `table`, `list`,
-`back`, `input`, `error`, `label` — stock Phoenix scaffolding the site never
-renders (~500 lines). It keeps and extends `button`, `a`, `flash`, `flash_group`,
-`header`, `tabs*`, `card*`, `border_beam`. `demo/1` stays until Stage 1a
+**Pruning.** `core_components.ex` loses `modal`, `show_modal`, `hide_modal`,
+`table`, `list` and `back` — stock Phoenix scaffolding with no call site
+(~200 lines). It keeps `button`, `a`, `flash`, `flash_group`, `icon`, `show`,
+`hide`, `header`, `tabs*`, `card*`, `border_beam`, and it keeps `simple_form`,
+`input`, `label` and `error`, which the `hybrid-form` demo renders
+(`hybrid_form.ex:8-9`). `icon/1`'s docstring points at
+`assets/tailwind.config.js` and is updated when that file goes. `demo/1` stays until Stage 1a
 replaces it with `example_page/1` — the current layout still calls it, and
 Stage 0 must leave the site working.
 
