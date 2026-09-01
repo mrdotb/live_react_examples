@@ -23,4 +23,26 @@ defmodule LiveReactExamplesWeb.SiteComponentsTest do
     # preference is light but the system prefers dark.
     assert head =~ "classList.toggle"
   end
+
+  test "site_header carries the primary nav and the toggle" do
+    html = render_component(&site_header/1, %{})
+
+    assert html =~ "/examples" or html =~ "/simple"
+    assert html =~ "github.com/mrdotb/live_react"
+    assert html =~ ~s(id="theme-toggle")
+  end
+
+  test "site_footer links to the library and its docs" do
+    html = render_component(&site_footer/1, %{})
+
+    assert html =~ "github.com/mrdotb/live_react"
+    assert html =~ "hexdocs.pm/live_react"
+  end
+
+  test "every page renders the header and the footer", %{conn: conn} do
+    html = conn |> get(~p"/simple") |> html_response(200)
+
+    assert html =~ ~s(id="theme-toggle")
+    assert html =~ "hexdocs.pm/live_react"
+  end
 end
