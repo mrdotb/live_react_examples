@@ -77,3 +77,18 @@ defmodule LiveReactExamples.AssetsBuildTest do
            |> Enum.all?(&String.starts_with?(&1, "18 100% 40%"))
   end
 end
+
+defmodule LiveReactExamples.AssetsDepsTest do
+  use ExUnit.Case, async: true
+
+  test "only one syntax highlighter is a dependency" do
+    package_json =
+      Path.expand("../assets/package.json", __DIR__) |> File.read!() |> Jason.decode!()
+
+    deps = Map.get(package_json, "dependencies", %{})
+
+    assert Map.has_key?(deps, "highlight.js"), "highlight.js is the one in use"
+    refute Map.has_key?(deps, "prism-react-renderer")
+    refute Map.has_key?(deps, "react-syntax-highlighter")
+  end
+end
