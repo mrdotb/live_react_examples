@@ -62,7 +62,7 @@ defmodule LiveReactExamples.MixProject do
   #
   defp live_react_dep do
     case System.get_env("LIVE_REACT_PATH") do
-      nil -> {:live_react, "~> 1.1.0"}
+      nil -> {:live_react, "~> 2.0"}
       path -> {:live_react, path: path, override: true}
     end
   end
