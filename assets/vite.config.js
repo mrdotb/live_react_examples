@@ -20,14 +20,12 @@ export default defineConfig(({ command }) => {
     publicDir: "static",
     plugins: [react(), liveReactPlugin(), tailwindcss()],
     ssr: {
-      external: [
-        "react",
-        "react-dom",
-        "react-dom/server",
-        "react/jsx-runtime",
-        "react/jsx-dev-runtime",
-      ],
-      noExternal: ["live_react"],
+      // Bundle every non-builtin dependency into the SSR entrypoint so
+      // priv/react-components/server.js is self-contained: it must run
+      // with no node_modules reachable from priv/ (see mix.exs release
+      // steps, which never copy assets/node_modules, and Docker's runner
+      // stage, which only copies the release).
+      noExternal: true,
     },
     resolve: {
       alias: {
