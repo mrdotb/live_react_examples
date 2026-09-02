@@ -3,6 +3,7 @@ import "vite/modulepreload-polyfill";
 
 import { Context } from "./context";
 import { Counter } from "./counter";
+import { CodeBlock } from "./examples/CodeBlock";
 import { Counter as ExampleCounter } from "./examples/Counter";
 import { DelaySlider } from "./delay-slider";
 import { FlashSonner } from "./flash-sonner";
@@ -22,6 +23,7 @@ export default {
   Context,
   Counter,
   DelaySlider,
+  "examples/CodeBlock": CodeBlock,
   "examples/Counter": ExampleCounter,
   FlashSonner,
   GithubCode,
