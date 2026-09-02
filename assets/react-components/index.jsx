@@ -6,6 +6,7 @@ import { Counter } from "./counter";
 import { CodeBlock } from "./examples/CodeBlock";
 import { Counter as ExampleCounter } from "./examples/Counter";
 import { Events as ExampleEvents } from "./examples/Events";
+import { ServerEvents as ExampleServerEvents } from "./examples/ServerEvents";
 import { Simple as ExampleSimple } from "./examples/Simple";
 import { SimpleProps as ExampleSimpleProps } from "./examples/SimpleProps";
 import { DelaySlider } from "./delay-slider";
@@ -32,6 +33,7 @@ export default {
   "examples/Counter": ExampleCounter,
   "examples/Events": ExampleEvents,
   "examples/Lazy": ExampleLazy,
+  "examples/ServerEvents": ExampleServerEvents,
   "examples/Simple": ExampleSimple,
   "examples/SimpleProps": ExampleSimpleProps,
   "examples/Typescript": ExampleTypescript,

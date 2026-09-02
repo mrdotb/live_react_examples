@@ -83,7 +83,7 @@ defmodule LiveReactExamples.Examples do
           module: "ServerEvents",
           react_ext: "jsx",
           features: ["push_event", "handleEvent", "toasts"],
-          status: :planned
+          status: :ready
         }
       ]
     },
