@@ -202,7 +202,7 @@ defmodule LiveReactExamples.Examples do
           module: "Lazy",
           react_ext: "jsx",
           features: ["dead view", "React.lazy", "Suspense"],
-          status: :planned
+          status: :ready
         }
       ]
     }

@@ -11,6 +11,7 @@ import { DelaySlider } from "./delay-slider";
 import { FlashSonner } from "./flash-sonner";
 import { GithubCode } from "./github-code";
 import { Lazy } from "./lazy";
+import { Lazy as ExampleLazy } from "./examples/Lazy";
 import { Link } from "./link";
 import { LinkExample } from "./link-example";
 import { LogList } from "./log-list";
@@ -28,6 +29,7 @@ export default {
   DelaySlider,
   "examples/CodeBlock": CodeBlock,
   "examples/Counter": ExampleCounter,
+  "examples/Lazy": ExampleLazy,
   "examples/Simple": ExampleSimple,
   "examples/SimpleProps": ExampleSimpleProps,
   "examples/Typescript": ExampleTypescript,
