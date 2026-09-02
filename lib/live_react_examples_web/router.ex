@@ -39,11 +39,20 @@ defmodule LiveReactExamplesWeb.Router do
     live "/examples", Examples.IndexLive
 
     for example <- LiveReactExamples.Examples.ready() do
-      live "/examples/#{example.id}",
-           Module.concat([
-             Examples,
-             "#{Macro.camelize(String.replace(example.id, "-", "_"))}Live"
-           ])
+      # Derived from the registry's `module` field, not by camelizing the
+      # slug: the two can diverge (e.g. slug "ssr" camelizes to "SsrLive",
+      # but the registry declares module: "SSR" -> "SSRLive"), and Phoenix
+      # does not verify route modules at compile time, so a mismatch here is
+      # a runtime UndefinedFunctionError on request rather than a build
+      # failure. See RouterTest for the compile-time guard.
+      #
+      # `Examples` is deliberately bare, not `LiveReactExamplesWeb.Examples`:
+      # `live/2` resolves it through `Phoenix.Router.scoped_alias/2`, which
+      # unconditionally prepends the enclosing scope's alias
+      # (`LiveReactExamplesWeb`) and does not check whether the module is
+      # already fully qualified, so a fully-qualified module here would
+      # double up to `LiveReactExamplesWeb.LiveReactExamplesWeb.Examples...`.
+      live "/examples/#{example.id}", Module.concat([Examples, "#{example.module}Live"])
     end
   end
 
