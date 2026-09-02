@@ -1,40 +1,9 @@
 defmodule LiveReactExamplesWeb.Examples.CounterLive do
-  use LiveReactExamplesWeb, :live_view
-
-  require LiveReactExamplesWeb.Examples.ExampleSource, as: ExampleSource
-
-  import LiveReactExamplesWeb.Examples.ExampleComponents
-
-  alias LiveReactExamples.Examples
-
-  @elixir_source ExampleSource.elixir_source("Counter")
-  @react_source ExampleSource.react_source("Counter")
-
-  def mount(_params, _session, socket) do
-    {:ok, example} = Examples.fetch("counter")
-
-    {:ok,
-     assign(socket,
-       page_title: "#{example.title} · LiveReact examples",
-       example: example,
-       elixir_source: @elixir_source,
-       react_source: @react_source
-     )}
-  end
-
-  def handle_params(params, _uri, socket) do
-    tab = if params["tab"] in tabs(), do: params["tab"], else: "preview"
-    {:noreply, assign(socket, :tab, tab)}
-  end
+  use LiveReactExamplesWeb.Examples.ExamplePage, id: "counter"
 
   def render(assigns) do
     ~H"""
-    <.example_page
-      example={@example}
-      tab={@tab}
-      elixir_source={@elixir_source}
-      react_source={@react_source}
-    >
+    <.example_page {example_assigns(assigns)}>
       <:preview>
         {live_render(@socket, LiveReactExamplesWeb.Examples.CounterPreview, id: "counter-preview")}
       </:preview>
@@ -42,8 +11,7 @@ defmodule LiveReactExamplesWeb.Examples.CounterLive do
       <:concepts>
         <p>
           Every assign that is not a reserved name is passed to React as a prop. <code>count</code>
-          lives on the server; the step slider lives in React's <code>useState</code>
-          and the server never sees it.
+          lives on the server; the step slider lives in React's <code>useState</code>, and the server never sees it.
         </p>
       </:concepts>
 
