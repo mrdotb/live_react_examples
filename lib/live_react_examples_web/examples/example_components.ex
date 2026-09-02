@@ -116,6 +116,17 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponents do
       </section>
 
       <footer class="flex items-center justify-between border-t border-[color:var(--edge)] pt-6 text-sm">
+        <%!--
+          Not `~p"/examples/#{...}"`: the router generates one literal route
+          per ready example (`/examples/counter`), never a dynamic
+          `/examples/:slug` — a LiveView route maps to one module, so a single
+          wildcard route can't dispatch to different LiveView modules. Verified
+          routes check a dynamic interpolation by matching a placeholder
+          segment against the compiled route patterns, and a literal route
+          never matches a placeholder, so `~p` here would warn permanently
+          under `--warnings-as-errors` regardless of how many examples are
+          ready. Plain interpolation is the correct tool for this one spot.
+        --%>
         <.link
           :if={@prev && @prev.status == :ready}
           navigate={"/examples/#{@prev.id}"}

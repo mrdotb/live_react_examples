@@ -39,6 +39,7 @@ defmodule LiveReactExamplesWeb.Examples.ExampleSource do
       |> String.replace(~s(name="examples/), ~s(name="))
       |> strip_moduledoc()
       |> String.replace(", layout: false", "")
+      |> strip_detach_hook()
       |> String.trim()
 
     quote do
@@ -72,5 +73,21 @@ defmodule LiveReactExamplesWeb.Examples.ExampleSource do
   """
   def strip_moduledoc(source) do
     String.replace(source, ~r/\s*@moduledoc\s+"""\R.*?\R\s*"""\R?/s, "\n")
+  end
+
+  @doc """
+  Removes the `detach_hook(socket, :active_tab, :handle_params)` line a
+  preview module's `mount/3` needs so it can be `live_render`ed as a child —
+  a root LiveView may attach a `:handle_params` hook (which
+  `LiveDemoAssigns`, shared by every LiveView in this app, does to track the
+  active demo for the old `<.demo>` chrome), but a child mounted via
+  `live_render/3` may not, so a preview module detaches it. That's plumbing
+  needed only because this demo app embeds the preview inside its own site
+  chrome — not something a real standalone LiveView would ever need — so it
+  is stripped from the displayed source along with the other embedding-only
+  lines this module already removes.
+  """
+  def strip_detach_hook(source) do
+    String.replace(source, ~r/[ \t]*socket = detach_hook\(.*\)\R/, "")
   end
 end

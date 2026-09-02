@@ -1,6 +1,8 @@
 defmodule LiveReactExamplesWeb.Router do
   use LiveReactExamplesWeb, :router
 
+  @external_resource Path.join([File.cwd!(), "lib/live_react_examples/examples.ex"])
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -33,6 +35,14 @@ defmodule LiveReactExamplesWeb.Router do
     live "/link-demo", LiveLinkDemo
     live "/link-usage", LiveLinkUsage
     live "/stream-demo", LiveStreamDemo
+
+    for example <- LiveReactExamples.Examples.ready() do
+      live "/examples/#{example.id}",
+           Module.concat([
+             Examples,
+             "#{Macro.camelize(String.replace(example.id, "-", "_"))}Live"
+           ])
+    end
   end
 
   scope "/", LiveReactExamplesWeb do
