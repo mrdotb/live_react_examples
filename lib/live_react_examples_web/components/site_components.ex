@@ -70,7 +70,7 @@ defmodule LiveReactExamplesWeb.SiteComponents do
           <a href="/" class="flex items-center">
             <img src={~p"/images/logo.svg"} class="w-32" alt="LiveReact" />
           </a>
-          <p class="hidden rounded-full bg-brand/10 px-2 font-medium leading-6 text-brand sm:block">
+          <p class="hidden rounded-full bg-brand/10 px-2 font-medium leading-6 text-brand-strong sm:block">
             examples
           </p>
         </div>
@@ -122,7 +122,8 @@ defmodule LiveReactExamplesWeb.SiteComponents do
     ]}>
       <div class="mx-auto flex max-w-screen-2xl flex-col gap-2 px-8 sm:flex-row sm:justify-between">
         <p>
-          Demo application for <a href={@github} class="text-brand hover:underline">LiveReact</a>
+          Demo application for
+          <a href={@github} class="text-brand-strong hover:underline">LiveReact</a>
           — React components inside Phoenix LiveView.
         </p>
         <div class="flex gap-4">

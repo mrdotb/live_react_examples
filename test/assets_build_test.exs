@@ -55,6 +55,22 @@ defmodule LiveReactExamples.AssetsBuildTest do
     assert css =~ ".dark"
   end
 
+  test "brand-as-text token is defined for both themes and emits a utility", %{css: css} do
+    # #FD4F00 is fine as a fill and fine on a dark ground, but as text on a
+    # light ground it measures 2.9-3.3:1, below the 4.5:1 AA floor. Measured on
+    # the rendered page, --brand-strong gives 4.86:1 on the header pill and
+    # 5.51:1 on the page ground in light mode, 5.09/5.48 in dark.
+    # The built CSS is minified, so match tolerantly on whitespace and case
+    # rather than on the source spelling.
+    assert css =~ ~r/--brand-strong:\s*#bd3800/i,
+           "light-mode brand text colour changed without re-measuring contrast"
+
+    assert css =~ ~r/\.dark\s*\{[^}]*--brand-strong/s, "dark mode must redefine --brand-strong"
+
+    assert css =~ ~r/\.text-brand-strong\s*\{/,
+           "the text-brand-strong utility is not being generated"
+  end
+
   test "shadcn aliases the existing components rely on still resolve", %{css: css} do
     for token <- ~w(--background --foreground --card --muted-foreground --border --ring --radius) do
       assert css =~ token, "missing #{token}; card/tabs/button components reference it"
