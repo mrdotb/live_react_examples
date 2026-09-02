@@ -14,7 +14,7 @@ hljs.registerLanguage("heex", erb);
 // server is brand orange, anything that runs in the browser is React cyan.
 const SIDE = {
   server: "border-[color:var(--color-brand)] text-[color:var(--color-brand)]",
-  client: "border-[color:var(--color-client)] text-[color:var(--color-client)]",
+  client: "border-[color:var(--color-client)] text-client-strong",
 };
 
 export function CodeBlock({ code, language, filename, side = "server" }) {

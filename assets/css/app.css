@@ -17,9 +17,9 @@
 @custom-variant phx-change-loading (.phx-change-loading&, .phx-change-loading &);
 
 /* `static` forces Tailwind to always emit these as CSS variables even
-   though nothing in the current templates uses `client`/`ink`/`paper` yet
-   (Tailwind 4 tree-shakes unused theme values by default) — later tasks
-   consume them as text-client, bg-ink, etc. */
+   though nothing in the current templates uses `ink`/`paper` yet (Tailwind 4
+   tree-shakes unused theme values by default; `client` is already consumed
+   by CodeBlock.jsx) — later tasks consume the rest as bg-ink, etc. */
 @theme static {
   /* Duotone palette. These encode which side of the wire something is on:
      orange for the server (LiveView, handle_event), cyan for the client
@@ -47,6 +47,14 @@
      colour for fills, borders and accents where contrast is not a text
      concern. */
   --color-brand-strong: var(--brand-strong);
+
+  /* React cyan as TEXT. #61DAFB is a fine fill and a fine accent on a dark
+     ground, but as text on a light ground it measures ~1.55:1 — below the
+     4.5:1 AA floor. This token flips per theme so `text-client-strong` is
+     always legible, while `text-client` / `bg-client` stay the literal
+     client colour for fills, borders and accents where contrast is not a
+     text concern. */
+  --color-client-strong: var(--client-strong);
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -90,6 +98,10 @@
      backdrop and 5.51:1 on the page ground. The lightest value clearing AA in
      both places, so it stays as close to #FD4F00 as legibility allows. */
   --brand-strong: #BD3800;
+  /* Computed via the WCAG relative-luminance formula: 5.36:1 against
+     --surface-raised (#ffffff). Cyan-700 from the same hue family as
+     --color-client, darkened until it clears the 4.5:1 AA floor. */
+  --client-strong: #0E7490;
   --surface: var(--color-paper);
   --surface-raised: #ffffff;
   --text: var(--color-ink);
@@ -127,6 +139,9 @@
 
   /* On the dark ground the literal brand colour already measures 5.1-5.5:1. */
   --brand-strong: var(--color-brand);
+  /* On the dark ground the literal client colour already measures 10.27:1
+     against --surface-raised (#111f2e). */
+  --client-strong: var(--color-client);
   --surface: var(--color-ink);
   --surface-raised: #111f2e;
   --text: var(--color-paper);

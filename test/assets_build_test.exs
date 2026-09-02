@@ -71,6 +71,23 @@ defmodule LiveReactExamples.AssetsBuildTest do
            "the text-brand-strong utility is not being generated"
   end
 
+  test "client-as-text token is defined for both themes and emits a utility", %{css: css} do
+    # #61DAFB is fine as a fill and fine on a dark ground, but as text on a
+    # light ground it measures ~1.55:1, below the 4.5:1 AA floor. Computed via
+    # the WCAG relative-luminance formula, --client-strong gives 5.36:1
+    # against --surface-raised (#ffffff) in light mode, 10.27:1 in dark.
+    # The built CSS is minified, so match tolerantly on whitespace and case
+    # rather than on the source spelling.
+    assert css =~ ~r/--client-strong:\s*#0e7490/i,
+           "light-mode client text colour changed without re-measuring contrast"
+
+    assert css =~ ~r/\.dark\s*\{[^}]*--client-strong/s,
+           "dark mode must redefine --client-strong"
+
+    assert css =~ ~r/\.text-client-strong\s*\{/,
+           "the text-client-strong utility is not being generated"
+  end
+
   test "shadcn aliases the existing components rely on still resolve", %{css: css} do
     for token <- ~w(--background --foreground --card --muted-foreground --border --ring --radius) do
       assert css =~ token, "missing #{token}; card/tabs/button components reference it"
