@@ -36,6 +36,8 @@ defmodule LiveReactExamplesWeb.Router do
     live "/link-usage", LiveLinkUsage
     live "/stream-demo", LiveStreamDemo
 
+    live "/examples", Examples.IndexLive
+
     for example <- LiveReactExamples.Examples.ready() do
       live "/examples/#{example.id}",
            Module.concat([
