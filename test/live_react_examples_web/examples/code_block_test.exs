@@ -38,11 +38,29 @@ defmodule LiveReactExamplesWeb.Examples.CodeBlockTest do
       />
       """)
 
-    assert html =~ "hello.ex"
-    assert html =~ "hello"
-    assert html =~ "world"
+    # `data-props` carries the raw `code`/`filename` strings on every render,
+    # SSR or not -- so `html =~ "hello.ex"` / "hello" / "world" would pass
+    # identically against a component that never server-rendered at all
+    # (proven: swap `ssr={true}` above for `ssr={false}` and every one of
+    # those substring checks still passes). Assert on evidence that only
+    # exists once SSR has actually run instead: LiveReact.Test's own `ssr`
+    # flag, and the highlight.js markup, which appears only in the
+    # server-rendered inner HTML and never in the JSON-encoded props.
+    react = LiveReact.Test.get_react(html, name: "examples/CodeBlock")
+
+    assert react.ssr == true
+    assert html =~ ~s(<span class="hljs-keyword">def</span>)
+    assert html =~ ~s(<span class="hljs-title">hello</span>)
+    assert html =~ ~s(<span class="hljs-symbol">:world</span>)
   end
 
+  # Unlike the test above, this one never touches raw HTML substrings: it
+  # decodes `data-props` via `LiveReact.Test.get_react/2` and compares each
+  # key for exact equality, so it can't pass against mismatched or missing
+  # content the way a substring check against markup that always contains
+  # the literal prop values could. `ssr` is left at its `:test` default
+  # (`false`, see config/test.exs), so this also exercises the client-only
+  # path -- no SSR runs, and the test doesn't claim any.
   test "the props reach the component" do
     assigns = %{}
 
