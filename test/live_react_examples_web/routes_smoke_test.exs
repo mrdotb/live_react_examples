@@ -8,13 +8,13 @@ defmodule LiveReactExamplesWeb.RoutesSmokeTest do
   and still carries the shared header/footer chrome.
 
   Every route here is exercised with a plain disconnected GET rather than
-  `Phoenix.LiveViewTest.live/2`. `live/2` needs `lazy_html` (a hex dependency
-  this project doesn't have — adding one is out of scope here) to join the
-  simulated socket, and that dependency has nothing to do with what this
-  suite checks: whether `mount/3` + `render/1` succeed and the shared layout
-  renders around them. A disconnected GET already exercises both `mount/3`
-  and `render/1` for a LiveView (Phoenix always renders the dead view before
-  a socket ever connects), which is what a layout regression would break.
+  `Phoenix.LiveViewTest.live/2`. `live/2` needs `lazy_html` (a test-only hex
+  dependency, added separately from this suite) to join the simulated
+  socket, and that dependency has nothing to do with what this suite checks:
+  whether `mount/3` + `render/1` succeed and the shared layout renders
+  around them. A disconnected GET already exercises both `mount/3` and
+  `render/1` for a LiveView (Phoenix always renders the dead view before a
+  socket ever connects), which is what a layout regression would break.
   """
   use LiveReactExamplesWeb.ConnCase, async: true
 
