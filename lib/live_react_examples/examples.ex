@@ -191,7 +191,7 @@ defmodule LiveReactExamples.Examples do
           module: "Typescript",
           react_ext: "tsx",
           features: ["dead view", "TypeScript"],
-          status: :planned
+          status: :ready
         },
         %{
           id: "lazy",

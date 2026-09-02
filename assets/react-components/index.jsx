@@ -20,6 +20,7 @@ import { SimpleProps } from "./simple-props";
 import { Slot } from "./slot";
 import { StreamDemo } from "./stream-demo";
 import { Typescript } from "./typescript";
+import { Typescript as ExampleTypescript } from "./examples/Typescript";
 
 export default {
   Context,
@@ -29,6 +30,7 @@ export default {
   "examples/Counter": ExampleCounter,
   "examples/Simple": ExampleSimple,
   "examples/SimpleProps": ExampleSimpleProps,
+  "examples/Typescript": ExampleTypescript,
   FlashSonner,
   GithubCode,
   Lazy,
