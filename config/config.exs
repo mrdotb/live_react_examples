@@ -50,7 +50,12 @@ config :git_ops,
     chore: [hidden?: true],
     docs: [hidden?: true],
     test: [hidden?: true],
-    ci: [hidden?: true]
+    ci: [hidden?: true],
+    # git_ops treats every body line shaped like `word: text` as the start of a
+    # new commit, so standard git trailers parse as commit types and warn on
+    # every release. Declaring them keeps them out of the changelog quietly.
+    "co-authored-by": [hidden?: true],
+    "claude-session": [hidden?: true]
   ]
 
 import_config "#{config_env()}.exs"
