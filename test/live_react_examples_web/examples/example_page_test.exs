@@ -49,6 +49,34 @@ defmodule LiveReactExamplesWeb.Examples.ExamplePageTest do
     assert title =~ "Counter · LiveReact examples"
   end
 
+  test "the last example's footer renders nothing for a missing next, not (coming soon)",
+       %{conn: conn} do
+    # Code review (finding 1): `:if={!@next || @next.status != :ready}` treated
+    # "there is no next example" the same as "the next example is planned",
+    # so /examples/lazy — the last example in the registry — rendered a bare
+    # "(coming soon)" pointing at nothing. The parenthesised form is unique to
+    # this footer (the sidebar's own "coming soon" is a tooltip attribute with
+    # no parens), so this assertion targets the footer specifically.
+    html = conn |> get(~p"/examples/lazy") |> html_response(200)
+
+    refute html =~ "(coming soon)"
+    # And the fix isn't just "print nothing everywhere" — the real prev link
+    # must still render.
+    {prev, next} = LiveReactExamples.Examples.neighbours("lazy")
+    assert next == nil
+    assert html =~ prev.title
+  end
+
+  test "the first example's footer renders nothing for a missing prev, not (coming soon)",
+       %{conn: conn} do
+    html = conn |> get(~p"/examples/counter") |> html_response(200)
+
+    refute html =~ "(coming soon)"
+    {prev, next} = LiveReactExamples.Examples.neighbours("counter")
+    assert prev == nil
+    assert html =~ next.title
+  end
+
   test "using the macro with an unknown slug fails at compile time" do
     assert_raise MatchError, fn ->
       Code.eval_string("""

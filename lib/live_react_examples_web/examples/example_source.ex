@@ -19,11 +19,26 @@ defmodule LiveReactExamplesWeb.Examples.ExampleSource do
 
   @doc """
   The preview module's source, rewritten to look like ordinary application
-  code: `LiveReactExamplesWeb.Examples.CounterPreview` becomes
-  `MyAppWeb.CounterLive`, the `examples/` component prefix is dropped, and the
-  `@moduledoc` and `layout: false` that exist only for this site are stripped.
+  code.
+
+  For a `:live` example, `LiveReactExamplesWeb.Examples.CounterPreview`
+  becomes `MyAppWeb.CounterLive`; the `examples/` component prefix is
+  dropped, and the `@moduledoc` and `layout: false` that exist only for
+  this site are stripped.
+
+  For a `:dead` example the rewrite goes further: these previews exist to
+  show that no LiveView is involved, so displaying them under a fictional
+  `MyAppWeb.SimpleLive` module with a `def preview(assigns)` function would
+  contradict the point of the example. Instead the module becomes
+  `MyAppWeb.PageHTML` — the function-component module a real dead view
+  would live in — the function is renamed after the example's slug (e.g.
+  `def simple(assigns)`), and `use Phoenix.Component` plus the explicit
+  `import LiveReact, only: [react: 1]` (needed here only because this
+  module isn't the real `PageHTML`) collapse into the single `use
+  MyAppWeb, :html` a real `PageHTML` module carries, which already imports
+  `LiveReact` in full.
   """
-  defmacro elixir_source(name) do
+  defmacro elixir_source(name, kind, id) do
     path =
       Path.join([
         File.cwd!(),
@@ -31,14 +46,17 @@ defmodule LiveReactExamplesWeb.Examples.ExampleSource do
         "#{Macro.underscore(name)}_preview.ex"
       ])
 
+    module_rewrite = if kind == :dead, do: "MyAppWeb.PageHTML", else: "MyAppWeb.#{name}Live"
+
     contents =
       path
       |> File.read!()
-      |> String.replace("LiveReactExamplesWeb.Examples.#{name}Preview", "MyAppWeb.#{name}Live")
+      |> String.replace("LiveReactExamplesWeb.Examples.#{name}Preview", module_rewrite)
       |> String.replace("LiveReactExamplesWeb", "MyAppWeb")
       |> String.replace(~s(name="examples/), ~s(name="))
       |> strip_moduledoc()
       |> String.replace(", layout: false", "")
+      |> rewrite_dead_view(kind, id)
       |> String.trim()
 
     quote do
@@ -46,6 +64,20 @@ defmodule LiveReactExamplesWeb.Examples.ExampleSource do
       unquote(contents)
     end
   end
+
+  defp rewrite_dead_view(source, :dead, id) do
+    source
+    |> String.replace(
+      "use Phoenix.Component\n\n  import LiveReact, only: [react: 1]",
+      "use MyAppWeb, :html"
+    )
+    |> String.replace(
+      "def preview(assigns) do",
+      "def #{String.replace(id, "-", "_")}(assigns) do"
+    )
+  end
+
+  defp rewrite_dead_view(source, _kind, _id), do: source
 
   @doc """
   The React component's source, verbatim. Tries `.jsx` then `.tsx`.

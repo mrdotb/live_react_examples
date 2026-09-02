@@ -34,7 +34,26 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponents do
 
   def example_page(assigns) do
     {prev, next} = Examples.neighbours(assigns.example.id)
-    assigns = assign(assigns, prev: prev, next: next)
+
+    # A `:dead` example has no LiveView anywhere on the page — that's the
+    # whole point of it — so labelling its second tab "LiveView" would
+    # contradict the example itself. Same reasoning for the filename shown
+    # above the code block: there is no `..._live.ex`, only the dead-view
+    # template a real `PageHTML` module would carry.
+    {tab_label, tab_filename} =
+      if assigns.example.kind == :dead do
+        {"Template", "page_html.ex"}
+      else
+        {"LiveView", "#{String.replace(assigns.example.id, "-", "_")}_live.ex"}
+      end
+
+    assigns =
+      assign(assigns,
+        prev: prev,
+        next: next,
+        tab_label: tab_label,
+        tab_filename: tab_filename
+      )
 
     ~H"""
     <article class="mx-auto w-full max-w-4xl">
@@ -68,7 +87,7 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponents do
       <nav class="mb-4 flex gap-1 border-b border-[color:var(--edge)]" aria-label="Example view">
         <.link
           :for={
-            {name, label} <- [{"preview", "Preview"}, {"liveview", "LiveView"}, {"react", "React"}]
+            {name, label} <- [{"preview", "Preview"}, {"liveview", @tab_label}, {"react", "React"}]
           }
           patch={"?tab=#{name}"}
           aria-current={@tab == name && "page"}
@@ -89,25 +108,25 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponents do
           class="rounded-lg border border-[color:var(--edge)] bg-[color:var(--surface-raised)] p-6"
         >
           {render_slot(@preview)}
-        </div>
 
-        <p :if={@example.kind == :dead} class="mt-3 text-sm text-[color:var(--text-muted)]">
-          This example needs no LiveView.
-          <.link
-            href={"/examples/#{@example.id}/raw"}
-            class="text-brand-strong hover:underline"
-          >
-            Open it standalone →
-          </.link>
-          to see it served with no socket.
-        </p>
+          <p :if={@example.kind == :dead} class="mt-3 text-sm text-[color:var(--text-muted)]">
+            This example needs no LiveView.
+            <.link
+              href={"/examples/#{@example.id}/raw"}
+              class="text-brand-strong hover:underline"
+            >
+              Open it standalone →
+            </.link>
+            to see it served with no socket.
+          </p>
+        </div>
 
         <.react
           :if={@tab == "liveview"}
           name="examples/CodeBlock"
           code={@elixir_source}
           language="elixir"
-          filename={"#{String.replace(@example.id, "-", "_")}_live.ex"}
+          filename={@tab_filename}
           side="server"
         />
 
@@ -145,7 +164,10 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponents do
         >
           ← {@prev.title}
         </.link>
-        <span :if={!@prev || @prev.status != :ready}></span>
+        <span :if={@prev && @prev.status != :ready} class="text-[color:var(--text-muted)]">
+          ← {@prev.title} (coming soon)
+        </span>
+        <span :if={!@prev}></span>
 
         <.link
           :if={@next && @next.status == :ready}
@@ -154,9 +176,10 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponents do
         >
           {@next.title} →
         </.link>
-        <span :if={!@next || @next.status != :ready} class="text-[color:var(--text-muted)]">
-          {@next && @next.title} (coming soon)
+        <span :if={@next && @next.status != :ready} class="text-[color:var(--text-muted)]">
+          {@next.title} (coming soon)
         </span>
+        <span :if={!@next}></span>
       </footer>
     </article>
     """

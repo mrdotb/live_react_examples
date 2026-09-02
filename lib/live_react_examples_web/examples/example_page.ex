@@ -41,7 +41,11 @@ defmodule LiveReactExamplesWeb.Examples.ExamplePage do
       import LiveReactExamplesWeb.Examples.ExampleComponents
 
       @example unquote(Macro.escape(example))
-      @elixir_source ExampleSource.elixir_source(unquote(name))
+      @elixir_source ExampleSource.elixir_source(
+                       unquote(name),
+                       unquote(example.kind),
+                       unquote(id)
+                     )
       @react_source ExampleSource.react_source(unquote(name))
 
       @impl Phoenix.LiveView

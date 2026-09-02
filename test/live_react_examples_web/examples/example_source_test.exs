@@ -8,8 +8,10 @@ defmodule LiveReactExamplesWeb.Examples.ExampleSourceTest do
 
   require LiveReactExamplesWeb.Examples.ExampleSource, as: ExampleSource
 
-  @elixir ExampleSource.elixir_source("Counter")
+  @elixir ExampleSource.elixir_source("Counter", :live, "counter")
   @react ExampleSource.react_source("Counter")
+  @dead_elixir ExampleSource.elixir_source("Simple", :dead, "simple")
+  @dead_elixir_dashed ExampleSource.elixir_source("SimpleProps", :dead, "simple-props")
 
   test "the elixir source is rewritten to look like a generic app" do
     refute @elixir =~ "LiveReactExamplesWeb"
@@ -46,6 +48,29 @@ defmodule LiveReactExamplesWeb.Examples.ExampleSourceTest do
       ES.react_source("NoSuchComponent")
       """)
     end
+  end
+
+  test "a :dead example is rewritten as a real PageHTML module, not a fictional LiveView" do
+    # Code review (finding 3): showing `MyAppWeb.SimpleLive` with
+    # `def preview(assigns)` under a tab labelled "LiveView" contradicted the
+    # example's whole point — that no LiveView is involved. These pin the
+    # rewrite so it can't regress silently.
+    assert @dead_elixir =~ "MyAppWeb.PageHTML"
+    assert @dead_elixir =~ "def simple(assigns) do"
+    assert @dead_elixir =~ "use MyAppWeb, :html"
+
+    refute @dead_elixir =~ "MyAppWeb.SimpleLive"
+    refute @dead_elixir =~ "def preview"
+    refute @dead_elixir =~ "use Phoenix.Component"
+    refute @dead_elixir =~ "import LiveReact"
+    refute @dead_elixir =~ "LiveReactExamplesWeb"
+
+    assert {:ok, _ast} = Code.string_to_quoted(@dead_elixir)
+  end
+
+  test "a :dead example's dashed slug becomes an underscored function name" do
+    assert @dead_elixir_dashed =~ "def simple_props(assigns) do"
+    refute @dead_elixir_dashed =~ "def simple-props"
   end
 
   test "strip_moduledoc removes only the moduledoc, not the code after it" do
