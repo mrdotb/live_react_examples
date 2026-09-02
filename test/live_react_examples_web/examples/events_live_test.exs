@@ -27,8 +27,4 @@ defmodule LiveReactExamplesWeb.Examples.EventsLiveTest do
     assert [["add", "/items/0", %{"body" => "hello from the test"} = item]] = diff
     assert is_integer(item["id"])
   end
-
-  test "the old flat route still works — stage 1b migrates it", %{conn: conn} do
-    assert {:ok, _view, _html} = live(conn, ~p"/log-list")
-  end
 end

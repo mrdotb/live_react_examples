@@ -11,25 +11,10 @@
     </aside>
     <main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
       <div class="mx-auto w-full min-w-0">
-        <%!--
-          `@demo` is only set (by `LiveDemoAssigns`) for the thirteen legacy
-          routes it knows about. The new registry-driven example pages (under
-          `/examples`) bring their own page chrome via `ExampleComponents.example_page/1`
-          and are not in that switch, so `@demo` is `nil` for them — render
-          their content directly rather than through the old `<.demo>` tabs,
-          which requires a known demo name.
-        --%>
-        <%= if @demo do %>
-          <.demo demo={@demo}>
-            {@inner_content}
-          </.demo>
-        <% else %>
-          {@inner_content}
-        <% end %>
+        {@inner_content}
       </div>
     </main>
   </div>
 </main>
 <.site_footer />
-<.react :if={@demo == :flash_sonner} name="FlashSonner" flash={@flash} socket={assigns[:socket]} />
 <.flash_group flash={@flash} />

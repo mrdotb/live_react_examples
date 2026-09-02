@@ -1,11 +1,13 @@
 defmodule LiveReactExamplesWeb.RoutesSmokeTest do
   @moduledoc """
-  Renders every route through the real layout chrome.
+  Renders every example route through the real layout chrome.
 
-  Component-level and `/simple`-only tests don't catch a layout regression on
-  the other thirteen routes (a missing assign, a broken `on_mount`, …). This
-  walks every route in the router and asserts each one renders successfully
-  and still carries the shared header/footer chrome.
+  Component-level tests for a single example don't catch a layout
+  regression on the others (a missing assign, a broken `on_mount`, …). This
+  walks every `:ready` example in the registry and asserts each one renders
+  successfully and still carries the shared header/footer chrome. The list
+  is derived from `LiveReactExamples.Examples.ready/0` rather than
+  hardcoded, so a newly-added example is covered automatically.
 
   Every route here is exercised with a plain disconnected GET rather than
   `Phoenix.LiveViewTest.live/2`. `live/2` needs `lazy_html` (a test-only hex
@@ -18,26 +20,9 @@ defmodule LiveReactExamplesWeb.RoutesSmokeTest do
   """
   use LiveReactExamplesWeb.ConnCase, async: true
 
-  @routes [
-    # Dead views (`PageController` actions).
-    "/simple",
-    "/simple-props",
-    "/typescript",
-    "/lazy",
-    # LiveViews.
-    "/live-counter",
-    "/log-list",
-    "/flash-sonner",
-    "/ssr",
-    "/hybrid-form",
-    "/slot",
-    "/context",
-    "/link-demo",
-    "/link-usage",
-    "/stream-demo"
-  ]
+  @routes for example <- LiveReactExamples.Examples.ready(), do: "/examples/#{example.id}"
 
-  for path <- @routes do
+  for path <- ["/examples" | @routes] do
     test "GET #{path} renders successfully with the shared layout chrome", %{conn: conn} do
       html = conn |> get(unquote(path)) |> html_response(200)
 

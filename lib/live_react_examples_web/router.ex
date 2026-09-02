@@ -3,6 +3,39 @@ defmodule LiveReactExamplesWeb.Router do
 
   @external_resource Path.join([File.cwd!(), "lib/live_react_examples/examples.ex"])
 
+  # The old flat URLs were public — the README pointed at /simple — so they
+  # redirect permanently rather than 404. Defined as a module attribute
+  # above the scope (not inside it), so the `for` comprehension below reads
+  # it at compile time without depending on attribute ordering inside a
+  # `scope` block.
+  #
+  # This is a module attribute rather than a private function: a `defp`
+  # here would compile, but calling it from this top-level `for` (module
+  # body code evaluated while the module is still being defined) raises
+  # `undefined function` — a function body only becomes callable once its
+  # enclosing module finishes compiling, and the module hasn't finished
+  # compiling yet when the `scope` block below runs.
+  #
+  # Four of these are renamed rather than kept identical: log-list ->
+  # events, flash-sonner -> server-events, slot -> slots, link-usage ->
+  # link, live-counter -> counter.
+  @legacy_paths %{
+    "/simple" => "simple",
+    "/simple-props" => "simple-props",
+    "/typescript" => "typescript",
+    "/lazy" => "lazy",
+    "/live-counter" => "counter",
+    "/log-list" => "events",
+    "/flash-sonner" => "server-events",
+    "/ssr" => "ssr",
+    "/hybrid-form" => "hybrid-form",
+    "/slot" => "slots",
+    "/context" => "context",
+    "/link-demo" => "link-demo",
+    "/link-usage" => "link",
+    "/stream-demo" => "streams"
+  }
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -20,21 +53,12 @@ defmodule LiveReactExamplesWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    get "/lazy", PageController, :lazy
-    get "/simple", PageController, :simple
-    get "/simple-props", PageController, :simple_props
-    get "/typescript", PageController, :typescript
 
-    live "/live-counter", LiveCounter
-    live "/context", LiveContext
-    live "/log-list", LiveLogList
-    live "/flash-sonner", LiveFlashSonner
-    live "/ssr", LiveSSR
-    live "/hybrid-form", LiveHybridForm
-    live "/slot", LiveSlot
-    live "/link-demo", LiveLinkDemo
-    live "/link-usage", LiveLinkUsage
-    live "/stream-demo", LiveStreamDemo
+    for {old_path, slug} <- @legacy_paths do
+      get old_path, RedirectController, :legacy,
+        as: :"legacy_#{String.replace(slug, "-", "_")}",
+        private: %{slug: slug}
+    end
 
     live "/examples", Examples.IndexLive
 

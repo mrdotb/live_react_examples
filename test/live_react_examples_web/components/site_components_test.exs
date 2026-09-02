@@ -12,7 +12,7 @@ defmodule LiveReactExamplesWeb.SiteComponentsTest do
   end
 
   test "root layout sets the theme before first paint", %{conn: conn} do
-    html = conn |> get(~p"/simple") |> html_response(200)
+    html = conn |> get(~p"/examples/simple") |> html_response(200)
 
     # The inline script must run in <head>, before <body> renders, or the page
     # paints light and then snaps to dark.
@@ -56,7 +56,7 @@ defmodule LiveReactExamplesWeb.SiteComponentsTest do
   end
 
   test "every page renders the header and the footer", %{conn: conn} do
-    html = conn |> get(~p"/simple") |> html_response(200)
+    html = conn |> get(~p"/examples/simple") |> html_response(200)
 
     assert html =~ ~s(id="theme-toggle")
     assert html =~ "hexdocs.pm/live_react"

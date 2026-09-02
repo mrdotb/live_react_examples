@@ -33,8 +33,4 @@ defmodule LiveReactExamplesWeb.Examples.ServerEventsLiveTest do
     assert_push_event(preview, "error", %{message: "This is an error message"})
     refute_push_event(preview, "info", %{})
   end
-
-  test "the old flat route still works — stage 1b migrates it", %{conn: conn} do
-    assert {:ok, _view, _html} = live(conn, ~p"/flash-sonner")
-  end
 end

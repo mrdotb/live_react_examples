@@ -46,8 +46,4 @@ defmodule LiveReactExamplesWeb.Examples.SlotsLiveTest do
     assert LiveReact.Test.get_react(html, name: "examples/Slots").props_diff ==
              [["replace", "/count", 1]]
   end
-
-  test "the old flat route still works — stage 1b migrates it", %{conn: conn} do
-    assert {:ok, _view, _html} = live(conn, ~p"/slot")
-  end
 end

@@ -25,8 +25,4 @@ defmodule LiveReactExamplesWeb.Examples.LinkLiveTest do
     assert react_2.props["navigate"] == "/examples/context"
     refute Map.has_key?(react_2.props, "href")
   end
-
-  test "the old flat route still works — stage 1b migrates it", %{conn: conn} do
-    assert {:ok, _view, _html} = live(conn, ~p"/link-usage")
-  end
 end

@@ -1,8 +1,6 @@
 defmodule LiveReactExamplesWeb.Examples.SSRLiveTest do
   use LiveReactExamplesWeb.ConnCase, async: true
 
-  import Phoenix.LiveViewTest
-
   test "the example page renders with the preview tab by default", %{conn: conn} do
     conn = get(conn, ~p"/examples/ssr")
     html = html_response(conn, 200)
@@ -35,9 +33,5 @@ defmodule LiveReactExamplesWeb.Examples.SSRLiveTest do
 
     refute ssr_false =~ "data-ssr"
     refute ssr_false =~ ~s(<div class="rounded-md border px-4 py-2">)
-  end
-
-  test "the old flat route still works — stage 1b migrates it", %{conn: conn} do
-    assert {:ok, _view, _html} = live(conn, ~p"/ssr")
   end
 end

@@ -58,8 +58,4 @@ defmodule LiveReactExamplesWeb.Examples.StreamsLiveTest do
     assert [["replace", "/messages", []] | inserts] = diff
     assert length(inserts) == 3
   end
-
-  test "the old flat route still works — stage 1b migrates it", %{conn: conn} do
-    assert {:ok, _view, _html} = live(conn, ~p"/stream-demo")
-  end
 end

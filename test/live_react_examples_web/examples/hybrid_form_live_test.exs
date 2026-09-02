@@ -33,8 +33,4 @@ defmodule LiveReactExamplesWeb.Examples.HybridFormLiveTest do
 
     assert html =~ "changed@example.com"
   end
-
-  test "the old flat route still works — stage 1b migrates it", %{conn: conn} do
-    assert {:ok, _view, _html} = live(conn, ~p"/hybrid-form")
-  end
 end

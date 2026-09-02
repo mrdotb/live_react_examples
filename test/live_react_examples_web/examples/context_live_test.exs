@@ -35,8 +35,4 @@ defmodule LiveReactExamplesWeb.Examples.ContextLiveTest do
     assert LiveReact.Test.get_react(html, name: "examples/Context").props_diff ==
              [["replace", "/count", 25]]
   end
-
-  test "the old flat route still works — stage 1b migrates it", %{conn: conn} do
-    assert {:ok, _view, _html} = live(conn, ~p"/context")
-  end
 end

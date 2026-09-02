@@ -1,9 +1,9 @@
 defmodule LiveReactExamplesWeb.PageControllerTest do
   use LiveReactExamplesWeb.ConnCase
 
-  test "GET / redirects to the first example", %{conn: conn} do
+  test "GET / redirects to the examples index", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert redirected_to(conn) == ~p"/simple"
+    assert redirected_to(conn) == ~p"/examples"
   end
 
   test "GET /up answers the health check", %{conn: conn} do

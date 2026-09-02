@@ -82,8 +82,4 @@ defmodule LiveReactExamplesWeb.Examples.LinkDemoLiveTest do
     # A fresh mount starts params_update_count over.
     assert socket.assigns.params_update_count == 0
   end
-
-  test "the old flat route still works — stage 1b migrates it", %{conn: conn} do
-    assert {:ok, _view, _html} = live(conn, ~p"/link-demo")
-  end
 end
