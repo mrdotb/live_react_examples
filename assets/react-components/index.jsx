@@ -6,7 +6,7 @@ import { Context as ExampleContext } from "./examples/Context";
 import { Counter as ExampleCounter } from "./examples/Counter";
 import { Events as ExampleEvents } from "./examples/Events";
 import { HybridForm as ExampleHybridForm } from "./examples/HybridForm";
-import { Link as ExampleLink } from "./examples/Link";
+import { LinkExample } from "./examples/Link";
 import { LinkDemo as ExampleLinkDemo } from "./examples/LinkDemo";
 import { ServerEvents as ExampleServerEvents } from "./examples/ServerEvents";
 import { Simple as ExampleSimple } from "./examples/Simple";
@@ -24,7 +24,7 @@ export default {
   "examples/Events": ExampleEvents,
   "examples/HybridForm": ExampleHybridForm,
   "examples/Lazy": ExampleLazy,
-  "examples/Link": ExampleLink,
+  "examples/Link": LinkExample,
   "examples/LinkDemo": ExampleLinkDemo,
   "examples/ServerEvents": ExampleServerEvents,
   "examples/Simple": ExampleSimple,

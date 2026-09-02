@@ -11,18 +11,36 @@ defmodule LiveReactExamplesWeb.Examples.LinkLiveTest do
     assert html =~ ~s(data-name="examples/Link")
   end
 
-  test "one Link uses href, the other uses navigate — not the same prop twice", %{conn: conn} do
+  test "the preview mounts a single Link component with no routing props", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/examples/link")
     preview = find_live_child(view, "link-preview")
     html = render(preview)
 
-    react_1 = LiveReact.Test.get_react(html, id: "examples/Link-1")
-    react_2 = LiveReact.Test.get_react(html, id: "examples/Link-2")
+    # Code review (finding 4): href/navigate used to be passed in from HEEx
+    # as props on two separate `<.react name="examples/Link">` calls — the
+    # unusual way to use `Link`, and it left the React tab with nothing of
+    # its own to show. Now the component takes its targets from its own
+    # JSX, so exactly one instance mounts, carrying no routing props at all.
+    react = LiveReact.Test.get_react(html, name: "examples/Link")
+    refute Map.has_key?(react.props, "href")
+    refute Map.has_key?(react.props, "navigate")
 
-    assert react_1.props["href"] == "/examples/counter"
-    refute Map.has_key?(react_1.props, "navigate")
+    assert_raise RuntimeError, fn ->
+      LiveReact.Test.get_react(html, id: "examples/Link-2")
+    end
+  end
 
-    assert react_2.props["navigate"] == "/examples/context"
-    refute Map.has_key?(react_2.props, "href")
+  test "the react tab shows real JSX usage of Link, not a bare re-export", %{conn: conn} do
+    html = conn |> get(~p"/examples/link?tab=react") |> html_response(200)
+
+    # Code review (finding 4): the file used to be a three-line
+    # `export { Link };` re-export, which taught nothing about how `Link`
+    # is actually used from JSX. Assert on content only real usage would
+    # contain — a component definition and both navigation modes wired to
+    # real paths.
+    assert html =~ "function LinkExample"
+    assert html =~ "examples/counter"
+    assert html =~ "examples/context"
+    assert html =~ "navigate"
   end
 end
