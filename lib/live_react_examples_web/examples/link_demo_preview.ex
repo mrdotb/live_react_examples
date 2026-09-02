@@ -1,24 +1,23 @@
 defmodule LiveReactExamplesWeb.Examples.LinkDemoPreview do
   @moduledoc """
-  Renders the LinkDemo component against the page's own socket, rather than
-  as a nested `live_render`'d child. `patch`/`navigate` only work on a
-  LiveView mounted directly by the router — a child raises
-  "cannot push_patch/2 ... because the given path does not point to the
-  current root view" — so the mount and params tracking this example exists
-  to show has to live on the page's own LiveView, not in here.
-
-  This module's source is displayed verbatim on the example page.
+  Minimal working Link Demo example. This module's source is displayed
+  verbatim on the example page, so it deliberately contains no page chrome.
   """
-  use Phoenix.Component
+  use LiveReactExamplesWeb, :live_view
 
-  import LiveReact, only: [react: 1]
+  def mount(_params, _session, socket) do
+    # Stored in the process dictionary, not an assign, specifically so it
+    # survives a remount: every route in this app's router lives in the
+    # single default (unnamed) live session, so `navigate` reuses the same
+    # BEAM process even though it calls `mount/3` again from scratch.
+    mount_count = Process.get(:link_demo_mount_count, 0) + 1
+    Process.put(:link_demo_mount_count, mount_count)
 
-  attr :current_path, :string, required: true
-  attr :mount_count, :integer, required: true
-  attr :params_update_count, :integer, required: true
-  attr :socket, :map, required: true
+    socket = assign(socket, mount_count: mount_count, params_update_count: 0, current_path: "")
+    {:ok, socket}
+  end
 
-  def preview(assigns) do
+  def render(assigns) do
     ~H"""
     <.react
       name="examples/LinkDemo"
@@ -28,5 +27,17 @@ defmodule LiveReactExamplesWeb.Examples.LinkDemoPreview do
       socket={@socket}
     />
     """
+  end
+
+  def handle_params(_params, uri, socket) do
+    %{path: path} = URI.parse(uri)
+
+    socket =
+      assign(socket,
+        current_path: path,
+        params_update_count: socket.assigns.params_update_count + 1
+      )
+
+    {:noreply, socket}
   end
 end

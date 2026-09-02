@@ -1,18 +1,25 @@
 defmodule LiveReactExamplesWeb.Examples.LinkDemoLive do
   use LiveReactExamplesWeb.Examples.ExamplePage, id: "link-demo"
 
+  # Not `live_render`'d, unlike every other `:live` example's preview:
+  # `patch`/`navigate` only work on a LiveView mounted directly by the
+  # router (a nested child raises "cannot push_patch/2 ... because the
+  # given path does not point to the current root view"), so the mount and
+  # params tracking this example exists to show has to run on this module,
+  # the real router-mounted view — not on a separate child process.
+  #
+  # `LinkDemoPreview` still holds the actual logic, and it still actually
+  # runs: `mount/3` and `handle_params/3` below call straight into its
+  # same-named functions rather than duplicating them, so the code the
+  # LiveView tab displays is provably the code executing on every request,
+  # just invoked directly instead of dispatched to a separate process.
   alias LiveReactExamplesWeb.Examples.LinkDemoPreview
 
   def render(assigns) do
     ~H"""
     <.example_page {example_assigns(assigns)}>
       <:preview>
-        <LinkDemoPreview.preview
-          current_path={@current_path}
-          mount_count={@mount_count}
-          params_update_count={@params_update_count}
-          socket={@socket}
-        />
+        {LinkDemoPreview.render(assigns)}
       </:preview>
 
       <:concepts>
@@ -51,19 +58,11 @@ defmodule LiveReactExamplesWeb.Examples.LinkDemoLive do
 
   def mount(params, session, socket) do
     {:ok, socket} = super(params, session, socket)
-
-    mount_count = Process.get(:link_demo_mount_count, 0) + 1
-    Process.put(:link_demo_mount_count, mount_count)
-
-    {:ok, assign(socket, mount_count: mount_count, params_update_count: 0, current_path: "")}
+    LinkDemoPreview.mount(params, session, socket)
   end
 
   def handle_params(params, uri, socket) do
     {:noreply, socket} = super(params, uri, socket)
-
-    %{path: path} = URI.parse(uri)
-    count = socket.assigns[:params_update_count] || 0
-
-    {:noreply, assign(socket, current_path: path, params_update_count: count + 1)}
+    LinkDemoPreview.handle_params(params, uri, socket)
   end
 end

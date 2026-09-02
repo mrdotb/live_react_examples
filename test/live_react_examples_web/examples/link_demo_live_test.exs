@@ -13,6 +13,23 @@ defmodule LiveReactExamplesWeb.Examples.LinkDemoLiveTest do
     assert html =~ ~s(data-name="examples/LinkDemo")
   end
 
+  test "the liveview tab shows the real tracking, not an empty wrapper", %{conn: conn} do
+    html = conn |> get(~p"/examples/link-demo?tab=liveview") |> html_response(200)
+
+    # This is the whole point of the example: what patch/navigate do to the
+    # LiveView underneath. If the displayed source were the thin wrapper
+    # that used to live in link_demo_live.ex (a 15-line <.react> call with
+    # no mount/handle_params override), none of this would be present —
+    # exactly the gap code review caught. Mirrors
+    # counter_live_test.exs's "the liveview tab shows real embedded source".
+    assert html =~ "MyAppWeb.LinkDemoLive"
+    assert html =~ "def mount"
+    assert html =~ "def handle_params"
+    assert html =~ "mount_count"
+    assert html =~ "params_update_count"
+    refute html =~ "LiveReactExamplesWeb"
+  end
+
   test "patch is handled by the router-mounted LiveView and bumps params_update_count, not mount_count",
        %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/examples/link-demo")
