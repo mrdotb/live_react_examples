@@ -115,7 +115,7 @@ defmodule LiveReactExamples.Examples do
           module: "HybridForm",
           react_ext: "jsx",
           features: ["forms", "Phoenix.HTML.Form encoder"],
-          status: :planned
+          status: :ready
         }
       ]
     },

@@ -7,6 +7,7 @@ import { CodeBlock } from "./examples/CodeBlock";
 import { Context as ExampleContext } from "./examples/Context";
 import { Counter as ExampleCounter } from "./examples/Counter";
 import { Events as ExampleEvents } from "./examples/Events";
+import { HybridForm as ExampleHybridForm } from "./examples/HybridForm";
 import { ServerEvents as ExampleServerEvents } from "./examples/ServerEvents";
 import { Simple as ExampleSimple } from "./examples/Simple";
 import { SimpleProps as ExampleSimpleProps } from "./examples/SimpleProps";
@@ -37,6 +38,7 @@ export default {
   "examples/Context": ExampleContext,
   "examples/Counter": ExampleCounter,
   "examples/Events": ExampleEvents,
+  "examples/HybridForm": ExampleHybridForm,
   "examples/Lazy": ExampleLazy,
   "examples/ServerEvents": ExampleServerEvents,
   "examples/Simple": ExampleSimple,
