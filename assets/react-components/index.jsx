@@ -5,6 +5,7 @@ import { CodeBlock } from "./examples/CodeBlock";
 import { Context as ExampleContext } from "./examples/Context";
 import { Counter as ExampleCounter } from "./examples/Counter";
 import { Events as ExampleEvents } from "./examples/Events";
+import { FileUpload as ExampleFileUpload } from "./examples/FileUpload";
 import { HybridForm as ExampleHybridForm } from "./examples/HybridForm";
 import { LinkExample } from "./examples/Link";
 import { LinkDemo as ExampleLinkDemo } from "./examples/LinkDemo";
@@ -23,6 +24,7 @@ export default {
   "examples/Context": ExampleContext,
   "examples/Counter": ExampleCounter,
   "examples/Events": ExampleEvents,
+  "examples/FileUpload": ExampleFileUpload,
   "examples/HybridForm": ExampleHybridForm,
   "examples/Lazy": ExampleLazy,
   "examples/Link": LinkExample,

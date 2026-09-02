@@ -131,6 +131,22 @@ defmodule LiveReactExamples.Examples do
       ]
     },
     %{
+      category: "Uploads",
+      items: [
+        %{
+          id: "file-upload",
+          title: "File Upload",
+          description: "allow_upload progress, driven from React with no live_file_input",
+          icon: "hero-arrow-up-tray",
+          kind: :live,
+          module: "FileUpload",
+          react_ext: "jsx",
+          features: ["allow_upload", "upload()", "UploadConfig encoder"],
+          status: :ready
+        }
+      ]
+    },
+    %{
       category: "Navigation",
       items: [
         %{
