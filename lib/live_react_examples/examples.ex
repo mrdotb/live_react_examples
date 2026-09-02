@@ -167,9 +167,9 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-puzzle-piece",
           kind: :live,
           module: "Slots",
-          react_ext: "jsx",
+          react_ext: "tsx",
           features: ["inner_block", "children"],
-          status: :planned
+          status: :ready
         },
         %{
           id: "context",
