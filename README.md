@@ -12,18 +12,22 @@ A Phoenix app whose examples each live at `/examples/<slug>`:
 
 | Route | Shows |
 | --- | --- |
-| `/examples/simple`, `/examples/simple-props` | Rendering a React component from a dead view |
-| `/examples/typescript` | TypeScript components |
-| `/examples/lazy` | Lazy-loading a component |
 | `/examples/counter` | `pushEvent` / assigns round-trip |
-| `/examples/context` | Sharing LiveView state through React context |
+| `/examples/simple`, `/examples/simple-props` | Rendering a React component from a dead view |
 | `/examples/events` | `pushEvent` from React reaching `handle_event` on the server |
 | `/examples/server-events` | Server events driving a client toast library |
-| `/examples/ssr` | Server-side rendering |
-| `/examples/hybrid-form` | A form split between LiveView and React |
-| `/examples/slots` | Phoenix slots as React children |
-| `/examples/link-demo`, `/examples/link` | The `Link` component for LiveView navigation |
 | `/examples/streams` | Phoenix streams (insert, replace, edit, delete) |
+| `/examples/props-diffing` | Only the changed prop path travels over the wire, unless a component opts out |
+| `/examples/async` | `assign_async`'s `AsyncResult` reaches React as loading, ok and failed |
+| `/examples/encoder` | `@derive LiveReact.Encoder` decides what a struct sends to the client, and what it doesn't |
+| `/examples/hybrid-form` | A form split between LiveView and React |
+| `/examples/file-upload` | `allow_upload` progress, driven from React with no `live_file_input` |
+| `/examples/link`, `/examples/link-demo` | The `Link` component for LiveView navigation |
+| `/examples/ssr` | Server-side rendering |
+| `/examples/slots` | Phoenix slots as React children |
+| `/examples/context` | Sharing LiveView state through React context |
+| `/examples/typescript` | TypeScript components |
+| `/examples/lazy` | Lazy-loading a component |
 
 Each example page offers Preview / LiveView / React tabs. The React components
 live in `assets/react-components/examples/`, paired with a LiveView (or
