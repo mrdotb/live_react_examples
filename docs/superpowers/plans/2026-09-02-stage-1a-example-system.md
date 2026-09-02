@@ -33,7 +33,7 @@ Single source of truth. Nav, index, prev/next links, routes and tests all derive
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: `LiveReactExamples.Examples` with `all/0` → list of example maps in display order; `by_category/0` → `[%{category: String.t(), items: [map]}]`; `fetch/1` → `{:ok, map} | :error` by slug; `neighbours/1` → `{prev, next}` where each is a map or `nil`; `ready/0` → only examples with `status: :ready`. Every example map has keys `:id, :title, :description, :icon, :kind, :module, :features, :status`.
+- Produces: `LiveReactExamples.Examples` with `all/0` → list of example maps in display order; `by_category/0` → `[%{category: String.t(), items: [map]}]`; `fetch/1` → `{:ok, map} | :error` by slug; `neighbours/1` → `{prev, next}` where each is a map or `nil`; `ready/0` → only examples with `status: :ready`. Every example map has keys `:id, :title, :description, :icon, :kind, :module, :react_ext, :features, :status`.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -47,12 +47,13 @@ defmodule LiveReactExamples.ExamplesTest do
 
   test "every example has the keys the page and nav depend on" do
     for example <- Examples.all() do
-      for key <- [:id, :title, :description, :icon, :kind, :module, :features, :status] do
+      for key <- [:id, :title, :description, :icon, :kind, :module, :react_ext, :features, :status] do
         assert Map.has_key?(example, key), "#{example[:id] || "?"} is missing #{key}"
       end
 
       assert example.kind in [:live, :dead], "#{example.id} has bad kind #{inspect(example.kind)}"
       assert example.status in [:ready, :planned]
+      assert example.react_ext in ["jsx", "tsx"]
       assert is_list(example.features) and example.features != []
     end
   end
@@ -139,6 +140,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-plus-circle",
           kind: :live,
           module: "Counter",
+          react_ext: "jsx",
           features: ["props", "phx-click", "local state"],
           status: :ready
         },
@@ -149,6 +151,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-sparkles",
           kind: :dead,
           module: "Simple",
+          react_ext: "jsx",
           features: ["dead view", "SSR"],
           status: :planned
         },
@@ -159,6 +162,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-arrow-right-circle",
           kind: :dead,
           module: "SimpleProps",
+          react_ext: "jsx",
           features: ["dead view", "props"],
           status: :planned
         }
@@ -174,6 +178,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-cursor-arrow-rays",
           kind: :live,
           module: "Events",
+          react_ext: "jsx",
           features: ["useLiveReact", "pushEvent"],
           status: :planned
         },
@@ -184,6 +189,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-bell-alert",
           kind: :live,
           module: "ServerEvents",
+          react_ext: "jsx",
           features: ["push_event", "handleEvent", "toasts"],
           status: :planned
         }
@@ -199,6 +205,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-signal",
           kind: :live,
           module: "Streams",
+          react_ext: "jsx",
           features: ["stream/4", "__dom_id"],
           status: :planned
         }
@@ -214,6 +221,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-adjustments-horizontal",
           kind: :live,
           module: "HybridForm",
+          react_ext: "jsx",
           features: ["forms", "Phoenix.HTML.Form encoder"],
           status: :planned
         }
@@ -229,6 +237,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-link",
           kind: :live,
           module: "Link",
+          react_ext: "jsx",
           features: ["Link", "patch", "navigate"],
           status: :planned
         },
@@ -239,6 +248,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-arrows-right-left",
           kind: :live,
           module: "LinkDemo",
+          react_ext: "jsx",
           features: ["Link", "handle_params"],
           status: :planned
         }
@@ -254,6 +264,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-server",
           kind: :live,
           module: "SSR",
+          react_ext: "jsx",
           features: ["ssr={false}"],
           status: :planned
         },
@@ -264,6 +275,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-puzzle-piece",
           kind: :live,
           module: "Slots",
+          react_ext: "jsx",
           features: ["inner_block", "children"],
           status: :planned
         },
@@ -274,6 +286,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-share",
           kind: :live,
           module: "Context",
+          react_ext: "jsx",
           features: ["context", "local state"],
           status: :planned
         },
@@ -284,6 +297,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-code-bracket",
           kind: :dead,
           module: "Typescript",
+          react_ext: "tsx",
           features: ["dead view", "TypeScript"],
           status: :planned
         },
@@ -294,6 +308,7 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-clock",
           kind: :dead,
           module: "Lazy",
+          react_ext: "jsx",
           features: ["dead view", "React.lazy", "Suspense"],
           status: :planned
         }
@@ -678,7 +693,8 @@ defmodule LiveReactExamplesWeb.Examples.CodeBlockTest do
         code: "def hello, do: :world",
         language: "elixir",
         filename: "hello.ex",
-        side: "server"
+        side: "server",
+        ssr: true
       )
 
     assert html =~ "hello.ex"
@@ -1018,8 +1034,8 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponents do
           :if={@tab == "react"}
           name="examples/CodeBlock"
           code={@react_source}
-          language={react_language(@example)}
-          filename={"#{@example.module}.#{react_extension(@example)}"}
+          language={@example.react_ext}
+          filename={"#{@example.module}.#{@example.react_ext}"}
           side="client"
         />
       </div>
@@ -1060,14 +1076,10 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponents do
     end)
   end
 
-  defp react_language(%{module: module}) do
-    if File.exists?(react_path(module, "tsx")), do: "tsx", else: "jsx"
-  end
-
-  defp react_extension(example), do: react_language(example)
-
-  defp react_path(module, ext),
-    do: Path.join([File.cwd!(), "assets/react-components/examples", "#{module}.#{ext}"])
+  # No file lookups here on purpose. An earlier draft resolved the extension
+  # with File.exists? at render time, which works in dev and silently falls
+  # back to "jsx" in a release, where assets/ does not exist. The registry
+  # carries it instead.
 end
 ```
 
