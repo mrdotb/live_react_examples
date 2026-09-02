@@ -170,29 +170,6 @@ defmodule LiveReactExamplesWeb.CoreComponents do
     """
   end
 
-  attr :class, :string, default: nil
-
-  attr :rest, :global,
-    include: ~w(navigate patch href replace method csrf_token),
-    doc: "the attributes to link"
-
-  slot :inner_block, required: true
-
-  def a(assigns) do
-    ~H"""
-    <a
-      class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
-        @class
-      ]}
-      {@rest}
-    >
-      {render_slot(@inner_block)}
-    </a>
-    """
-  end
-
   @doc """
   Renders an input with label and error messages.
 
@@ -368,31 +345,6 @@ defmodule LiveReactExamplesWeb.CoreComponents do
   end
 
   @doc """
-  Renders a header with title.
-  """
-  attr :class, :string, default: nil
-
-  slot :inner_block, required: true
-  slot :subtitle
-  slot :actions
-
-  def header(assigns) do
-    ~H"""
-    <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
-      <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
-          {render_slot(@inner_block)}
-        </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
-          {render_slot(@subtitle)}
-        </p>
-      </div>
-      <div class="flex-none">{render_slot(@actions)}</div>
-    </header>
-    """
-  end
-
-  @doc """
   Renders a [Heroicon](https://heroicons.com).
 
   Heroicons come in three styles – outline, solid, and mini.
@@ -443,115 +395,12 @@ defmodule LiveReactExamplesWeb.CoreComponents do
     )
   end
 
-  attr(:id, :string, required: true, doc: "id for root tabs tag")
-  attr(:default, :string, default: nil, doc: "default tab value")
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
-  def tabs(assigns) do
-    ~H"""
-    <div class={@class} id={@id} {@rest}>
-      {render_slot(@inner_block)}
-    </div>
-    """
-  end
-
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
-  def tabs_list(assigns) do
-    ~H"""
-    <div
-      class={[
-        "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
-        @class
-      ]}
-      {@rest}
-    >
-      {render_slot(@inner_block)}
-    </div>
-    """
-  end
-
-  attr(:root, :string, required: true, doc: "id of root tabs tag")
-  attr(:value, :string, required: true, doc: "target value of tab content")
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
-  def tabs_trigger(assigns) do
-    ~H"""
-    <button
-      class={[
-        "tabs-trigger",
-        "inline-flex w-full items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm cursor-pointer",
-        @class
-      ]}
-      data-target={@value}
-      phx-click={show_tab(@root, @value)}
-      {@rest}
-    >
-      {render_slot(@inner_block)}
-    </button>
-    """
-  end
-
-  attr(:value, :string, required: true, doc: "unique for tab content")
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
-  def tabs_content(assigns) do
-    ~H"""
-    <div
-      class={[
-        "tabs-content",
-        "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        @class
-      ]}
-      value={@value}
-      {@rest}
-    >
-      {render_slot(@inner_block)}
-    </div>
-    """
-  end
-
   @doc """
-  Card component
-
-  ## Examples:
-
-        <.card>
-          <.card_header>
-            <.card_title>Card title</.card_title>
-            <.card_description>Card subtitle</.card_description>
-          </.card_header>
-          <.card_content>
-            Card text
-          </.card_content>
-          <.card_footer>
-            <.button>Button</.button>
-          </.card_footer>
-        </.card>
+  Card sub-components. `card/1` and `card_content/1`, the outer wrapper and
+  its body slot, were removed as dead code — nothing on the site renders a
+  `<.card>`. `card_header/1`, `card_title/1`, `card_description/1` and
+  `card_footer/1` are untouched here; auditing those is outside this pass.
   """
-
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
-  def card(assigns) do
-    ~H"""
-    <div
-      class={["rounded-xl border-sm bg-card text-card-foreground shadow-sm overflow-x-auto", @class]}
-      {@rest}
-    >
-      {render_slot(@inner_block)}
-    </div>
-    """
-  end
 
   attr(:class, :string, default: nil)
   slot(:inner_block, required: true)
@@ -593,36 +442,12 @@ defmodule LiveReactExamplesWeb.CoreComponents do
   slot(:inner_block, required: true)
   attr(:rest, :global)
 
-  def card_content(assigns) do
-    ~H"""
-    <div class={["p-6", @class]} {@rest}>
-      {render_slot(@inner_block)}
-    </div>
-    """
-  end
-
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
   def card_footer(assigns) do
     ~H"""
     <div class={["flex items-center justify-between p-6 pt-0 ", @class]} {@rest}>
       {render_slot(@inner_block)}
     </div>
     """
-  end
-
-  # Set selected tab to active
-  # show appropriate tab content
-  defp show_tab(root, value) do
-    %JS{}
-    |> JS.set_attribute({"data-state", ""}, to: "##{root} .tabs-trigger[data-state=active]")
-    |> JS.set_attribute({"data-state", "active"},
-      to: "##{root} .tabs-trigger[data-target=#{value}]"
-    )
-    |> JS.hide(to: "##{root} .tabs-content:not([value=#{value}])")
-    |> JS.show(to: "##{root} .tabs-content[value=#{value}]")
   end
 
   attr :class, :string, default: nil
