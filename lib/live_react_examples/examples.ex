@@ -45,7 +45,7 @@ defmodule LiveReactExamples.Examples do
           module: "Simple",
           react_ext: "jsx",
           features: ["dead view", "SSR"],
-          status: :planned
+          status: :ready
         },
         %{
           id: "simple-props",

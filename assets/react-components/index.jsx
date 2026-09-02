@@ -5,6 +5,7 @@ import { Context } from "./context";
 import { Counter } from "./counter";
 import { CodeBlock } from "./examples/CodeBlock";
 import { Counter as ExampleCounter } from "./examples/Counter";
+import { Simple as ExampleSimple } from "./examples/Simple";
 import { DelaySlider } from "./delay-slider";
 import { FlashSonner } from "./flash-sonner";
 import { GithubCode } from "./github-code";
@@ -25,6 +26,7 @@ export default {
   DelaySlider,
   "examples/CodeBlock": CodeBlock,
   "examples/Counter": ExampleCounter,
+  "examples/Simple": ExampleSimple,
   FlashSonner,
   GithubCode,
   Lazy,

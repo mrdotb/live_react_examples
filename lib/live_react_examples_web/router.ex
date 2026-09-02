@@ -54,6 +54,10 @@ defmodule LiveReactExamplesWeb.Router do
       # double up to `LiveReactExamplesWeb.LiveReactExamplesWeb.Examples...`.
       live "/examples/#{example.id}", Module.concat([Examples, "#{example.module}Live"])
     end
+
+    for example <- LiveReactExamples.Examples.ready(), example.kind == :dead do
+      get "/examples/#{example.id}/raw", PageController, :raw_example, as: :"raw_#{example.id}"
+    end
   end
 
   scope "/", LiveReactExamplesWeb do

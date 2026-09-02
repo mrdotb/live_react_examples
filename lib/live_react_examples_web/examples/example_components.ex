@@ -91,6 +91,17 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponents do
           {render_slot(@preview)}
         </div>
 
+        <p :if={@example.kind == :dead} class="mt-3 text-sm text-[color:var(--text-muted)]">
+          This example needs no LiveView.
+          <.link
+            href={"/examples/#{@example.id}/raw"}
+            class="text-brand-strong hover:underline"
+          >
+            Open it standalone →
+          </.link>
+          to see it served with no socket.
+        </p>
+
         <.react
           :if={@tab == "liveview"}
           name="examples/CodeBlock"
