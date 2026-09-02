@@ -40,9 +40,13 @@ defmodule LiveReactExamples.AssetsBuildTest do
     # ...) that replaced tailwind.config.js's theme.extend.colors. Assert on the
     # actual generated class rules, not just the presence of the --color-* tokens,
     # so this fails if the mapping stops producing utilities the app depends on.
-    assert css =~ ~r/\.bg-card\{[^}]*background-color:\s*var\(--color-card\)/
-    assert css =~ ~r/\.text-card-foreground\{[^}]*color:\s*var\(--color-card-foreground\)/
-    assert css =~ ~r/\.bg-muted\{[^}]*background-color:\s*var\(--color-muted\)/
+    #
+    # bg-card, text-card-foreground and bg-muted dropped from this list: they
+    # were used only by CoreComponents.card/1 and .tabs_list/1, which the
+    # whole-branch review found dead (no call site anywhere) and removed.
+    # Per app.css's own comment, these tree-shake deliberately — "if the last
+    # usage of one is ever removed, it should disappear from the build, not
+    # linger forever" — so their absence now is correct, not a regression.
     assert css =~ ~r/\.bg-background\{[^}]*background-color:\s*var\(--color-background\)/
     assert css =~ ~r/\.bg-primary\{[^}]*background-color:\s*var\(--color-primary\)/
     assert css =~ ~r/ring-ring[^{]*\{[^}]*--tw-ring-color:\s*var\(--color-ring\)/
