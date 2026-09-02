@@ -114,9 +114,14 @@ defmodule LiveReactExamplesWeb.SiteComponents do
   come from the registry, so adding an example adds its nav entry.
   """
   attr :current, :string, default: nil
+  # Not read anywhere in the running app (the one call site never passes it) —
+  # it exists so a test can inject a fixture containing a :planned item,
+  # since the real registry no longer has one once every example is migrated.
+  attr :categories, :list, default: nil
 
   def example_nav(assigns) do
-    assigns = assign(assigns, categories: LiveReactExamples.Examples.by_category())
+    assigns =
+      assign(assigns, categories: assigns.categories || LiveReactExamples.Examples.by_category())
 
     ~H"""
     <nav aria-label="Examples">

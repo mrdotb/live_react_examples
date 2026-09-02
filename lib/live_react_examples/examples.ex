@@ -99,7 +99,7 @@ defmodule LiveReactExamples.Examples do
           module: "Streams",
           react_ext: "jsx",
           features: ["stream/4", "__dom_id"],
-          status: :planned
+          status: :ready
         }
       ]
     },

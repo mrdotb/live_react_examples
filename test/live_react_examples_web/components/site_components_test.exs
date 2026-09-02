@@ -77,9 +77,24 @@ defmodule LiveReactExamplesWeb.SiteComponentsTest do
   end
 
   test "example_nav links only ready examples" do
-    html = render_component(&example_nav/1, %{current: nil})
+    # Every real example is `:ready` once stage 1b finishes migrating them,
+    # so the real registry no longer has a `:planned` entry to assert
+    # against here. `example_nav/1` accepts a `:categories` override for
+    # exactly this: inject a fixture with one of each status.
+    fixture = [
+      %{
+        category: "Fixture",
+        items: [
+          %{id: "fixture-ready", title: "Fixture Ready", status: :ready},
+          %{id: "fixture-planned", title: "Fixture Planned", status: :planned}
+        ]
+      }
+    ]
 
-    assert html =~ ~s(href="/examples/counter")
-    refute html =~ ~s(href="/examples/streams")
+    html = render_component(&example_nav/1, %{current: nil, categories: fixture})
+
+    assert html =~ ~s(href="/examples/fixture-ready")
+    refute html =~ ~s(href="/examples/fixture-planned")
+    assert html =~ "coming soon"
   end
 end

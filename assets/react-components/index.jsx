@@ -12,6 +12,7 @@ import { Simple as ExampleSimple } from "./examples/Simple";
 import { SimpleProps as ExampleSimpleProps } from "./examples/SimpleProps";
 import { Slots as ExampleSlots } from "./examples/Slots";
 import { SSR as ExampleSSR } from "./examples/SSR";
+import { Streams as ExampleStreams } from "./examples/Streams";
 import { DelaySlider } from "./delay-slider";
 import { FlashSonner } from "./flash-sonner";
 import { GithubCode } from "./github-code";
@@ -42,6 +43,7 @@ export default {
   "examples/SimpleProps": ExampleSimpleProps,
   "examples/Slots": ExampleSlots,
   "examples/SSR": ExampleSSR,
+  "examples/Streams": ExampleStreams,
   "examples/Typescript": ExampleTypescript,
   FlashSonner,
   GithubCode,
