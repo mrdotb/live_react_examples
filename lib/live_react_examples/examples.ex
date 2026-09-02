@@ -158,7 +158,7 @@ defmodule LiveReactExamples.Examples do
           module: "SSR",
           react_ext: "jsx",
           features: ["ssr={false}"],
-          status: :planned
+          status: :ready
         },
         %{
           id: "slots",

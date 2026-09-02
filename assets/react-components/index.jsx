@@ -11,6 +11,7 @@ import { ServerEvents as ExampleServerEvents } from "./examples/ServerEvents";
 import { Simple as ExampleSimple } from "./examples/Simple";
 import { SimpleProps as ExampleSimpleProps } from "./examples/SimpleProps";
 import { Slots as ExampleSlots } from "./examples/Slots";
+import { SSR as ExampleSSR } from "./examples/SSR";
 import { DelaySlider } from "./delay-slider";
 import { FlashSonner } from "./flash-sonner";
 import { GithubCode } from "./github-code";
@@ -40,6 +41,7 @@ export default {
   "examples/Simple": ExampleSimple,
   "examples/SimpleProps": ExampleSimpleProps,
   "examples/Slots": ExampleSlots,
+  "examples/SSR": ExampleSSR,
   "examples/Typescript": ExampleTypescript,
   FlashSonner,
   GithubCode,
