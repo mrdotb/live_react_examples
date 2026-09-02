@@ -37,7 +37,11 @@ defmodule LiveReactExamplesWeb.CoreComponentsTest do
     tabs_trigger: 1,
     tabs_content: 1,
     card: 1,
-    card_content: 1
+    card_content: 1,
+    card_header: 1,
+    card_title: 1,
+    card_description: 1,
+    card_footer: 1
   ]
 
   @kept [

@@ -395,61 +395,6 @@ defmodule LiveReactExamplesWeb.CoreComponents do
     )
   end
 
-  @doc """
-  Card sub-components. `card/1` and `card_content/1`, the outer wrapper and
-  its body slot, were removed as dead code — nothing on the site renders a
-  `<.card>`. `card_header/1`, `card_title/1`, `card_description/1` and
-  `card_footer/1` are untouched here; auditing those is outside this pass.
-  """
-
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
-  def card_header(assigns) do
-    ~H"""
-    <div class={["flex flex-col space-y-1.5 p-6", @class]} {@rest}>
-      {render_slot(@inner_block)}
-    </div>
-    """
-  end
-
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
-  def card_title(assigns) do
-    ~H"""
-    <h3 class={["text-2xl font-semibold leading-none tracking-tight", @class]} {@rest}>
-      {render_slot(@inner_block)}
-    </h3>
-    """
-  end
-
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
-  def card_description(assigns) do
-    ~H"""
-    <p class={["text-sm text-muted-foreground", @class]} {@rest}>
-      {render_slot(@inner_block)}
-    </p>
-    """
-  end
-
-  attr(:class, :string, default: nil)
-  slot(:inner_block, required: true)
-  attr(:rest, :global)
-
-  def card_footer(assigns) do
-    ~H"""
-    <div class={["flex items-center justify-between p-6 pt-0 ", @class]} {@rest}>
-      {render_slot(@inner_block)}
-    </div>
-    """
-  end
-
   attr :class, :string, default: nil
   attr :size, :integer, default: 200
   attr :duration, :integer, default: 15
