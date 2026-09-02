@@ -59,6 +59,18 @@ defmodule LiveReactExamplesWeb.Examples.IndexLiveTest do
     assert html =~ "coming soon"
   end
 
+  test "the tab title follows the site-wide convention, not a third form", %{conn: conn} do
+    # Code review (finding 7): the index used a third title form
+    # ("Examples · LiveReact") distinct from every example page's
+    # "<title> · LiveReact examples", on top of the root layout's own
+    # doubling bug. Pin it to the one convention.
+    html = conn |> get(~p"/examples") |> html_response(200)
+    [title] = Regex.run(~r{<title[^>]*>(.*?)</title>}s, html, capture: :all_but_first)
+
+    assert String.trim(title) == "Examples · LiveReact examples"
+    refute title =~ "Phoenix Framework"
+  end
+
   test "explains the live/dead distinction rather than leaving it unexplained", %{conn: conn} do
     html = conn |> get(~p"/examples") |> html_response(200)
 

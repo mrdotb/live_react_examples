@@ -6,7 +6,7 @@ defmodule LiveReactExamplesWeb.Examples.IndexLive do
   def mount(_params, _session, socket) do
     {:ok,
      assign(socket,
-       page_title: "Examples · LiveReact",
+       page_title: "Examples · LiveReact examples",
        categories: Examples.by_category()
      )}
   end

@@ -46,7 +46,15 @@ defmodule LiveReactExamplesWeb.Examples.ExamplePageTest do
     # the actual `<title>` element, which only carries this content because
     # `mount/3` assigns `page_title`.
     [title] = Regex.run(~r{<title[^>]*>(.*?)</title>}s, html, capture: :all_but_first)
-    assert title =~ "Counter · LiveReact examples"
+
+    # Code review (finding 7): the macro's `page_title` already carried
+    # " · LiveReact examples", and the root layout's `<.live_title
+    # suffix=" · Phoenix Framework">` appended a second, unrelated suffix on
+    # top — every tab read "Counter · LiveReact examples · Phoenix
+    # Framework". Assert the exact text, not just a substring match, so a
+    # regression that tacks anything else on fails here.
+    assert String.trim(title) == "Counter · LiveReact examples"
+    refute title =~ "Phoenix Framework"
   end
 
   test "the last example's footer renders nothing for a missing next, not (coming soon)",
