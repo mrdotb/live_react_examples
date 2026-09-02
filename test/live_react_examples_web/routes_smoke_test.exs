@@ -23,6 +23,17 @@ defmodule LiveReactExamplesWeb.RoutesSmokeTest do
   @routes for example <- LiveReactExamples.Examples.ready(), do: "/examples/#{example.id}"
 
   for path <- ["/examples" | @routes] do
+    # /examples/ssr's preview hard-codes `ssr={true}` on one of its two
+    # components, overriding `config :live_react, ssr: false`
+    # (config/test.exs) — so, unlike every other route here, rendering it
+    # shells out to real NodeJS SSR via `priv/react-components/server.js`,
+    # gitignored and populated only by `mix assets.build`. Tag just this one
+    # generated test `:assets` rather than the whole module, so the smoke
+    # test still covers every other route by default.
+    if path == "/examples/ssr" do
+      @tag :assets
+    end
+
     test "GET #{path} renders successfully with the shared layout chrome", %{conn: conn} do
       html = conn |> get(unquote(path)) |> html_response(200)
 

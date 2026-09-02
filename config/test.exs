@@ -25,5 +25,8 @@ config :phoenix_live_view,
 # that path, not something introduced here. Dev is unaffected: it uses
 # LiveReact.SSR.ViteJS, which renders through the Vite dev server.
 # Disabling it for tests keeps the suite deterministic without requiring a
-# full Vite/Node build; no test asserts on SSR output.
+# full Vite/Node build. `ssr_live_test.exs` is the one test that overrides
+# this default (`ssr={true}` on its own components) to assert on real SSR
+# output; it's tagged `:assets` and excluded from the default `mix test`
+# run for exactly that reason — see its moduledoc.
 config :live_react, ssr: false

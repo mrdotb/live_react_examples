@@ -33,8 +33,19 @@ defmodule LiveReactExamplesWeb.LegacyRedirectTest do
   end
 
   test "every redirect target actually resolves", %{conn: conn} do
-    for {_old, new} <- @redirects do
+    # Not /examples/ssr: its preview hard-codes `ssr={true}` on one of its
+    # two components, overriding `config :live_react, ssr: false`
+    # (config/test.exs), so resolving it shells out to real NodeJS SSR via
+    # `priv/react-components/server.js` — gitignored, populated only by
+    # `mix assets.build`. Covered separately below, tagged `:assets`, so
+    # this test still covers every other target by default.
+    for {_old, new} <- @redirects, new != "/examples/ssr" do
       assert conn |> get(new) |> html_response(200) =~ "Key concepts"
     end
+  end
+
+  @tag :assets
+  test "the /examples/ssr redirect target resolves", %{conn: conn} do
+    assert conn |> get(@redirects["/ssr"]) |> html_response(200) =~ "Key concepts"
   end
 end

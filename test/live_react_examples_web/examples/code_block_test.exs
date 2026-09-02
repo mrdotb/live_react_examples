@@ -23,6 +23,13 @@ defmodule LiveReactExamplesWeb.Examples.CodeBlockTest do
   # through that helper, so `__changed__` stays `nil` and both SSR and props
   # behave as they do from a real dead render -- the same reason Task 4's
   # `ExampleComponentsTest` renders `.example_page` the same way.
+  #
+  # `ssr={true}` below overrides `config :live_react, ssr: false`
+  # (config/test.exs), so this test exercises real NodeJS SSR via
+  # `priv/react-components/server.js` — gitignored, populated only by
+  # `mix assets.build`. Tagged `:assets` for the same reason
+  # `ssr_live_test.exs` is: excluded from the default `mix test` run.
+  @tag :assets
   test "server-renders the code into the initial HTML" do
     assigns = %{}
 

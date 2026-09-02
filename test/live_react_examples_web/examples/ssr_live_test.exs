@@ -1,5 +1,18 @@
 defmodule LiveReactExamplesWeb.Examples.SSRLiveTest do
+  @moduledoc """
+  `ssr={true}` on this page overrides `config :live_react, ssr: false`
+  (config/test.exs), so the second test below exercises real NodeJS SSR via
+  `priv/react-components/server.js`. That directory is gitignored and
+  populated only by `mix assets.build` / the asset build pipeline (see
+  config/test.exs's comment on `config :live_react, ssr: false`) — on a
+  fresh clone before that has run, `NodeJS.Supervisor.call!/3` raises an
+  unreadable `NodeJS.Error` instead of a normal test failure. Tagged
+  `:assets` for the same reason `assets_build_test.exs` is: excluded from
+  the default `mix test` run, included with `mix test --include assets`.
+  """
   use LiveReactExamplesWeb.ConnCase, async: true
+
+  @moduletag :assets
 
   test "the example page renders with the preview tab by default", %{conn: conn} do
     conn = get(conn, ~p"/examples/ssr")
