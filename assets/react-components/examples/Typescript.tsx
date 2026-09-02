@@ -9,9 +9,7 @@ function MyButton({ title }: { title: string }) {
   );
 }
 
-export function Typescript(props: LiveProps) {
-  console.log(props);
-
+export function Typescript(_props: LiveProps) {
   return (
     <div className="flex flex-col space-y-4">
       <h1>Typescript</h1>

@@ -17,7 +17,7 @@ A Phoenix app whose examples each live at `/examples/<slug>`:
 | `/examples/lazy` | Lazy-loading a component |
 | `/examples/counter` | `pushEvent` / assigns round-trip |
 | `/examples/context` | Sharing LiveView state through React context |
-| `/examples/events` | Streaming updates into a component |
+| `/examples/events` | `pushEvent` from React reaching `handle_event` on the server |
 | `/examples/server-events` | Server events driving a client toast library |
 | `/examples/ssr` | Server-side rendering |
 | `/examples/hybrid-form` | A form split between LiveView and React |

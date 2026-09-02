@@ -97,4 +97,30 @@ defmodule LiveReactExamplesWeb.SiteComponentsTest do
     refute html =~ ~s(href="/examples/fixture-planned")
     assert html =~ "coming soon"
   end
+
+  test "example_nav keeps registry order with a planned item mid-category" do
+    # Two separate `:for` loops (one for ready, one for planned) render every
+    # ready link first and every planned span after, regardless of actual
+    # registry order — a planned item mid-category would jump to the bottom.
+    # Stage 1c adds planned entries, so this matters beyond a fixture.
+    fixture = [
+      %{
+        category: "Fixture",
+        items: [
+          %{id: "fixture-first", title: "Fixture First", status: :ready},
+          %{id: "fixture-middle", title: "Fixture Middle", status: :planned},
+          %{id: "fixture-last", title: "Fixture Last", status: :ready}
+        ]
+      }
+    ]
+
+    html = render_component(&example_nav/1, %{current: nil, categories: fixture})
+
+    {first, _} = :binary.match(html, "Fixture First")
+    {middle, _} = :binary.match(html, "Fixture Middle")
+    {last, _} = :binary.match(html, "Fixture Last")
+
+    assert first < middle
+    assert middle < last
+  end
 end

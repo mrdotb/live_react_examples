@@ -131,29 +131,37 @@ defmodule LiveReactExamplesWeb.SiteComponents do
         </h4>
 
         <div class="grid grid-flow-row auto-rows-max text-sm">
-          <.link
-            :for={item <- items}
-            :if={item.status == :ready}
-            navigate={"/examples/#{item.id}"}
-            aria-current={@current == item.id && "page"}
-            class={[
-              "rounded-md px-2 py-1",
-              @current == item.id && "font-medium text-brand-strong",
-              @current != item.id &&
-                "text-[color:var(--text-muted)] hover:text-[color:var(--text)]"
-            ]}
-          >
-            {item.title}
-          </.link>
+          <%!--
+            One loop, not a ready-`:for` followed by a separate planned-`:for`:
+            two loops over the same `items` list render every ready link
+            first and every planned span after, regardless of the registry's
+            actual order — a planned item mid-category would jump to the
+            bottom. A single loop with one `:if`/`:if` pair per item keeps
+            registry order.
+          --%>
+          <%= for item <- items do %>
+            <.link
+              :if={item.status == :ready}
+              navigate={"/examples/#{item.id}"}
+              aria-current={@current == item.id && "page"}
+              class={[
+                "rounded-md px-2 py-1",
+                @current == item.id && "font-medium text-brand-strong",
+                @current != item.id &&
+                  "text-[color:var(--text-muted)] hover:text-[color:var(--text)]"
+              ]}
+            >
+              {item.title}
+            </.link>
 
-          <span
-            :for={item <- items}
-            :if={item.status != :ready}
-            class="px-2 py-1 text-[color:var(--text-muted)] opacity-50"
-            title="coming soon"
-          >
-            {item.title}
-          </span>
+            <span
+              :if={item.status != :ready}
+              class="px-2 py-1 text-[color:var(--text-muted)] opacity-50"
+              title="coming soon"
+            >
+              {item.title}
+            </span>
+          <% end %>
         </div>
       </div>
     </nav>
