@@ -63,5 +63,6 @@ defmodule LiveReactExamplesWeb.Examples.ExampleSourceTest do
     refute stripped =~ "Explanatory prose"
     assert stripped =~ "def keep_me"
     assert stripped =~ "defmodule Thing"
+    assert {:ok, _ast} = Code.string_to_quoted(stripped)
   end
 end

@@ -71,6 +71,6 @@ defmodule LiveReactExamplesWeb.Examples.ExampleSource do
   directly — an over-greedy match here silently truncates the displayed source.
   """
   def strip_moduledoc(source) do
-    String.replace(source, ~r/\s*@moduledoc\s+"""(?:.*?)"""\R?/s, "\n")
+    String.replace(source, ~r/\s*@moduledoc\s+"""\R.*?\R\s*"""\R?/s, "\n")
   end
 end
