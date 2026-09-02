@@ -21,6 +21,22 @@ defmodule LiveReactExamplesWeb.Examples.PropsDiffingLiveTest do
     assert html =~ ~s(data-name="examples/PropsDiffing")
   end
 
+  test "the component receives no server-computed byte figures", %{conn: conn} do
+    {:ok, view, _html} = live(conn, ~p"/examples/props-diffing")
+    preview = find_live_child(view, "props-diffing-preview")
+    html = render(preview)
+
+    # The byte counts shown on the page must come from measuring the real
+    # `data-props`/`data-props-diff` attributes client-side, not from a
+    # server-side reconstruction smuggled in as a prop. If either key
+    # reappears here, the page is fabricating numbers again.
+    for id <- ["examples/PropsDiffing-1", "examples/PropsDiffing-2"] do
+      props = LiveReact.Test.get_react(html, id: id).props
+      refute Map.has_key?(props, "patch_bytes")
+      refute Map.has_key?(props, "full_bytes")
+    end
+  end
+
   test "the diffed instance uses diff mode and the other does not", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/examples/props-diffing")
     preview = find_live_child(view, "props-diffing-preview")

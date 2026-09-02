@@ -4,21 +4,16 @@ defmodule LiveReactExamplesWeb.Examples.PropsDiffingPreview do
   diffing on (the default) and once with `diff={false}`. Changing one field
   sends a single-field JSON patch to the diffed instance and the whole
   payload again to the other — a contrast that is invisible on the wire
-  without opening a network inspector, so this preview computes and shows
-  the byte counts itself, independently of LiveReact's internals, right on
-  the page.
+  without opening a network inspector. LiveReact writes the real payload
+  onto each instance's wrapper element as `data-props` and
+  `data-props-diff`, so the React component reads those attributes itself
+  and reports their byte length — this preview does not compute or guess
+  the numbers.
   """
   use LiveReactExamplesWeb, :live_view
 
   def mount(_params, _session, socket) do
-    payload = build_payload(0)
-
-    {:ok,
-     assign(socket,
-       payload: payload,
-       full_bytes: byte_size(Jason.encode!(payload)),
-       patch_bytes: byte_size(Jason.encode!(%{counter: payload.counter}))
-     ), layout: false}
+    {:ok, assign(socket, payload: build_payload(0)), layout: false}
   end
 
   def render(assigns) do
@@ -27,10 +22,10 @@ defmodule LiveReactExamplesWeb.Examples.PropsDiffingPreview do
       <.button phx-click="touch_one_field">Change one field</.button>
 
       <p class="text-sm text-muted-foreground">
-        Last update: the diffed instance received a <strong>{@patch_bytes}-byte</strong>
-        patch naming just <code>counter</code>; the undiffed instance received the whole
-        <strong>{@full_bytes}-byte</strong>
-        payload again.
+        Each instance below reads its own <code>data-props</code>
+        and <code>data-props-diff</code>
+        attributes and reports their byte length — the diffed instance should show a
+        small patch, the undiffed one a much larger payload and an empty diff.
       </p>
 
       <.react name="examples/PropsDiffing" label="diff={true}" payload={@payload} socket={@socket} />
@@ -47,14 +42,7 @@ defmodule LiveReactExamplesWeb.Examples.PropsDiffingPreview do
   end
 
   def handle_event("touch_one_field", _params, socket) do
-    payload = Map.update!(socket.assigns.payload, :counter, &(&1 + 1))
-
-    {:noreply,
-     assign(socket,
-       payload: payload,
-       full_bytes: byte_size(Jason.encode!(payload)),
-       patch_bytes: byte_size(Jason.encode!(%{counter: payload.counter}))
-     )}
+    {:noreply, assign(socket, payload: Map.update!(socket.assigns.payload, :counter, &(&1 + 1)))}
   end
 
   defp build_payload(counter) do
