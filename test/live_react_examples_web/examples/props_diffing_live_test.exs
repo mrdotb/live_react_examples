@@ -76,4 +76,61 @@ defmodule LiveReactExamplesWeb.Examples.PropsDiffingLiveTest do
     # this would fail.
     assert undiffed.props_diff == []
   end
+
+  describe "the contrast the example exists to show" do
+    # Measuring the SIZE of data-props cannot distinguish the two modes: on a
+    # diffed component that attribute holds the first snapshot and never
+    # changes again, so both instances read ~3078 bytes while meaning opposite
+    # things. What separates them is which attribute CHANGES on an update.
+    # These assertions pin that, so the example cannot regress back into
+    # displaying a comparison that is not a comparison.
+    defp wire_attrs(html) do
+      Regex.scan(~r/data-name="examples\/PropsDiffing"[^>]*/, html)
+      |> Enum.map(fn [tag] ->
+        grab = fn re -> Regex.run(re, tag) |> then(&(&1 && Enum.at(&1, 1))) || "" end
+
+        %{
+          mode: grab.(~r/data-use-diff="([^"]*)"/),
+          props: grab.(~r/data-props="([^"]*)"/),
+          diff: grab.(~r/data-props-diff="([^"]*)"/)
+        }
+      end)
+    end
+
+    test "an update changes only the diff on one instance and only the props on the other",
+         %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/examples/props-diffing")
+      preview = find_live_child(view, "props-diffing-preview")
+
+      before = wire_attrs(render(preview))
+      render_hook(preview, "touch_one_field", %{})
+      later = wire_attrs(render(preview))
+
+      assert length(before) == 2, "the example must render both instances"
+
+      [diffed_before, plain_before] = before
+      [diffed_after, plain_after] = later
+
+      assert diffed_before.mode == "true"
+      assert plain_before.mode == "false"
+
+      # The diffed instance: props frozen at the first snapshot, patch changes.
+      assert diffed_after.props == diffed_before.props,
+             "a diffed component must NOT resend data-props"
+
+      refute diffed_after.diff == diffed_before.diff,
+             "a diffed component must receive a new data-props-diff"
+
+      # The undiffed instance: whole payload resent, no patch at all.
+      refute plain_after.props == plain_before.props,
+             "an undiffed component must resend the whole data-props"
+
+      assert plain_after.diff == plain_before.diff,
+             "an undiffed component must not receive a patch"
+
+      # And the size difference is the lesson: a small patch vs a whole payload.
+      assert byte_size(diffed_after.diff) < 100
+      assert byte_size(plain_after.props) > 1000
+    end
+  end
 end

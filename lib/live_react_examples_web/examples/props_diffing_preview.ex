@@ -2,14 +2,17 @@ defmodule LiveReactExamplesWeb.Examples.PropsDiffingPreview do
   @moduledoc """
   The same component twice, bound to the same large payload: once with prop
   diffing on (the default) and once with `diff={false}`. Changing one field
-  sends a single-field JSON patch to the diffed instance and the whole
-  payload again to the other — a contrast that is invisible on the wire
-  without opening a network inspector. LiveReact writes the real payload
-  onto each instance's wrapper element as `data-props` and
-  `data-props-diff`, so the React component reads those attributes itself
-  and reports their byte length — this preview does not compute or guess
-  the numbers.
+  sends a single-field JSON patch to the diffed instance and the whole payload
+  again to the other.
+
+  Each instance measures what actually crossed the wire, by comparing its own
+  `data-props` and `data-props-diff` attributes against their previous values.
+  Reporting the *size* of `data-props` would be misleading: on a diffed
+  component it holds the first snapshot and never changes again, so both
+  instances would show a near-identical number while meaning entirely
+  different things. What separates them is which attribute changed.
   """
+
   use LiveReactExamplesWeb, :live_view
 
   def mount(_params, _session, socket) do
@@ -21,11 +24,12 @@ defmodule LiveReactExamplesWeb.Examples.PropsDiffingPreview do
     <div class="space-y-4">
       <.button phx-click="touch_one_field">Change one field</.button>
 
-      <p class="text-sm text-muted-foreground">
-        Each instance below reads its own <code>data-props</code>
-        and <code>data-props-diff</code>
-        attributes and reports their byte length — the diffed instance should show a
-        small patch, the undiffed one a much larger payload and an empty diff.
+      <p class="text-sm text-[color:var(--text-muted)]">
+        Each instance reports how many bytes actually changed on its wrapper element
+        for the last update, and the running total. The diffed instance receives a
+        small <code>data-props-diff</code>
+        patch; the other receives the whole <code>data-props</code>
+        payload again every time.
       </p>
 
       <.react name="examples/PropsDiffing" label="diff={true}" payload={@payload} socket={@socket} />
