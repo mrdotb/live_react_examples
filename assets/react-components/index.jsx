@@ -9,6 +9,7 @@ import { Counter as ExampleCounter } from "./examples/Counter";
 import { Events as ExampleEvents } from "./examples/Events";
 import { HybridForm as ExampleHybridForm } from "./examples/HybridForm";
 import { Link as ExampleLink } from "./examples/Link";
+import { LinkDemo as ExampleLinkDemo } from "./examples/LinkDemo";
 import { ServerEvents as ExampleServerEvents } from "./examples/ServerEvents";
 import { Simple as ExampleSimple } from "./examples/Simple";
 import { SimpleProps as ExampleSimpleProps } from "./examples/SimpleProps";
@@ -42,6 +43,7 @@ export default {
   "examples/HybridForm": ExampleHybridForm,
   "examples/Lazy": ExampleLazy,
   "examples/Link": ExampleLink,
+  "examples/LinkDemo": ExampleLinkDemo,
   "examples/ServerEvents": ExampleServerEvents,
   "examples/Simple": ExampleSimple,
   "examples/SimpleProps": ExampleSimpleProps,

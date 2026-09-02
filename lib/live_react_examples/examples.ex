@@ -142,7 +142,7 @@ defmodule LiveReactExamples.Examples do
           module: "LinkDemo",
           react_ext: "jsx",
           features: ["Link", "handle_params"],
-          status: :planned
+          status: :ready
         }
       ]
     },
