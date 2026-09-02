@@ -178,9 +178,9 @@ defmodule LiveReactExamples.Examples do
           icon: "hero-share",
           kind: :live,
           module: "Context",
-          react_ext: "jsx",
+          react_ext: "tsx",
           features: ["context", "local state"],
-          status: :planned
+          status: :ready
         },
         %{
           id: "typescript",

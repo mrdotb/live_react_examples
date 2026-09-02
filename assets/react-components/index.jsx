@@ -4,6 +4,7 @@ import "vite/modulepreload-polyfill";
 import { Context } from "./context";
 import { Counter } from "./counter";
 import { CodeBlock } from "./examples/CodeBlock";
+import { Context as ExampleContext } from "./examples/Context";
 import { Counter as ExampleCounter } from "./examples/Counter";
 import { Events as ExampleEvents } from "./examples/Events";
 import { ServerEvents as ExampleServerEvents } from "./examples/ServerEvents";
@@ -30,6 +31,7 @@ export default {
   Counter,
   DelaySlider,
   "examples/CodeBlock": CodeBlock,
+  "examples/Context": ExampleContext,
   "examples/Counter": ExampleCounter,
   "examples/Events": ExampleEvents,
   "examples/Lazy": ExampleLazy,
