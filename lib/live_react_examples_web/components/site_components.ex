@@ -107,6 +107,55 @@ defmodule LiveReactExamplesWeb.SiteComponents do
   end
 
   @doc """
+  Sidebar navigation, driven entirely by the example registry.
+
+  The old sidebar hand-listed every route and split them into "Dead Views" and
+  "LiveViews" with no explanation. Categories and the live/dead distinction now
+  come from the registry, so adding an example adds its nav entry.
+  """
+  attr :current, :string, default: nil
+
+  def example_nav(assigns) do
+    assigns = assign(assigns, categories: LiveReactExamples.Examples.by_category())
+
+    ~H"""
+    <nav aria-label="Examples">
+      <div :for={%{category: category, items: items} <- @categories} class="pb-4">
+        <h4 class="mb-1 px-2 py-1 text-sm font-semibold text-[color:var(--text)]">
+          {category}
+        </h4>
+
+        <div class="grid grid-flow-row auto-rows-max text-sm">
+          <.link
+            :for={item <- items}
+            :if={item.status == :ready}
+            navigate={"/examples/#{item.id}"}
+            aria-current={@current == item.id && "page"}
+            class={[
+              "rounded-md px-2 py-1",
+              @current == item.id && "font-medium text-brand-strong",
+              @current != item.id &&
+                "text-[color:var(--text-muted)] hover:text-[color:var(--text)]"
+            ]}
+          >
+            {item.title}
+          </.link>
+
+          <span
+            :for={item <- items}
+            :if={item.status != :ready}
+            class="px-2 py-1 text-[color:var(--text-muted)] opacity-50"
+            title="coming soon"
+          >
+            {item.title}
+          </span>
+        </div>
+      </div>
+    </nav>
+    """
+  end
+
+  @doc """
   Site footer.
   """
   attr :class, :string, default: nil

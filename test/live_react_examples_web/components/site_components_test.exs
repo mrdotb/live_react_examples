@@ -61,4 +61,25 @@ defmodule LiveReactExamplesWeb.SiteComponentsTest do
     assert html =~ ~s(id="theme-toggle")
     assert html =~ "hexdocs.pm/live_react"
   end
+
+  test "example_nav renders every category and marks the active example" do
+    html = render_component(&example_nav/1, %{current: "counter"})
+
+    for %{category: category, items: items} <- LiveReactExamples.Examples.by_category() do
+      # `category` is asserted HTML-escaped, not raw: "Props & data" renders
+      # as "Props &amp; data", so a raw `html =~ category` would never match
+      # and this would silently fail to check that category at all.
+      assert html =~ Phoenix.HTML.safe_to_string(Phoenix.HTML.html_escape(category))
+      for item <- items, do: assert(html =~ item.title)
+    end
+
+    assert html =~ ~s(aria-current="page")
+  end
+
+  test "example_nav links only ready examples" do
+    html = render_component(&example_nav/1, %{current: nil})
+
+    assert html =~ ~s(href="/examples/counter")
+    refute html =~ ~s(href="/examples/streams")
+  end
 end
