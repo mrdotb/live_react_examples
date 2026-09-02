@@ -28,7 +28,11 @@ defmodule LiveReactExamplesWeb.Examples.IndexLiveTest do
   test "explains the live/dead distinction rather than leaving it unexplained", %{conn: conn} do
     html = conn |> get(~p"/examples") |> html_response(200)
 
-    assert html =~ "LiveView"
-    assert html =~ "without"
+    # Not "LiveView" / "without" alone: "LiveView" also matches the per-card
+    # kind label and "without" also matches the Context card's description,
+    # so both pass even with the foreword paragraph deleted entirely. Assert
+    # on phrases distinctive to the foreword prose itself.
+    assert html =~ "Some examples run inside a LiveView with a socket"
+    assert html =~ "Each example says which it is."
   end
 end

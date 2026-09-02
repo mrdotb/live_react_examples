@@ -42,6 +42,10 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponentsTest do
     html = render_page("liveview")
 
     assert html =~ "counter_live.ex"
+    # Not just the filename header (which comes from the registry, never
+    # from the source): assert the actual source content is present, so this
+    # fails against the empty-code-block bug the stage exists to fix.
+    assert html =~ "def mount(_, _, socket), do: {:ok, socket}"
     refute html =~ "PREVIEW HERE"
   end
 
@@ -49,6 +53,9 @@ defmodule LiveReactExamplesWeb.Examples.ExampleComponentsTest do
     html = render_page("react")
 
     assert html =~ "Counter.jsx"
+    # Same as above: the filename alone doesn't prove the source made it
+    # through, only its content does.
+    assert html =~ "export function Counter() {}"
     refute html =~ "PREVIEW HERE"
   end
 

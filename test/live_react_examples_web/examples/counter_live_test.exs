@@ -32,6 +32,10 @@ defmodule LiveReactExamplesWeb.Examples.CounterLiveTest do
     html = conn |> get(~p"/examples/counter?tab=nonsense") |> html_response(200)
 
     refute html =~ "MyAppWeb.CounterLive"
+    # Refuting the source alone doesn't prove the preview came back — a fallback
+    # that renders neither would pass just as well. Assert the preview's React
+    # component actually rendered.
+    assert html =~ ~s(data-name="examples/Counter")
   end
 
   test "an unknown slug 404s", %{conn: conn} do
