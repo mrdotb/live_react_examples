@@ -106,9 +106,19 @@ Pushing a `v*` tag builds a Docker image and publishes it to the public
 `ghcr.io/mrdotb/live-react-examples` (see `.github/workflows/publish.yml`),
 tagged `vX.Y.Z`, `vX.Y` and `latest`:
 
+Releases are cut with [git_ops](https://github.com/zachdaniel/git_ops), which
+derives the next version from Conventional Commit messages, rewrites
+`CHANGELOG.md` and creates the tag:
+
 ```bash
-git tag v0.1.0 && git push origin v0.1.0
+mix git_ops.release        # --dry-run first to see what it would do
+git push && git push --tags
 ```
+
+`feat:` bumps the minor version, `fix:` the patch; a `!` or a
+`BREAKING CHANGE:` footer bumps the major. Commits typed `chore`, `docs`,
+`test` and `ci` are kept out of the changelog. If nothing since the last tag
+warrants a release, git_ops says so rather than tagging.
 
 The app is served at <https://live-react.mrdotb.com> from a k3s cluster, deployed
 by Flux from the `ironforge-scaleway` GitOps repo under

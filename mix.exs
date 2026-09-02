@@ -53,6 +53,7 @@ defmodule LiveReactExamples.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:tidewave, "~> 0.9", only: :dev},
+      {:git_ops, "~> 2.10", only: [:dev], runtime: false},
       live_react_dep()
     ]
   end

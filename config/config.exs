@@ -34,4 +34,23 @@ config :phoenix, :json_library, Jason
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
+# git_ops derives the next version and the changelog from Conventional Commit
+# messages, then tags the release. `mix git_ops.release` bumps the version in
+# mix.exs, rewrites CHANGELOG.md and creates a `vX.Y.Z` tag — which is exactly
+# what .github/workflows/publish.yml triggers on.
+config :git_ops,
+  mix_project: LiveReactExamples.MixProject,
+  changelog_file: "CHANGELOG.md",
+  repository_url: "https://github.com/mrdotb/live_react_examples",
+  manage_mix_version?: true,
+  manage_readme_version: false,
+  version_tag_prefix: "v",
+  types: [
+    refactor: [header: "Refactors"],
+    chore: [hidden?: true],
+    docs: [hidden?: true],
+    test: [hidden?: true],
+    ci: [hidden?: true]
+  ]
+
 import_config "#{config_env()}.exs"
