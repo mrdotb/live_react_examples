@@ -5,6 +5,7 @@ import { Async as ExampleAsync } from "./examples/Async";
 import { CodeBlock } from "./examples/CodeBlock";
 import { Context as ExampleContext } from "./examples/Context";
 import { Counter as ExampleCounter } from "./examples/Counter";
+import { Encoder as ExampleEncoder } from "./examples/Encoder";
 import { Events as ExampleEvents } from "./examples/Events";
 import { FileUpload as ExampleFileUpload } from "./examples/FileUpload";
 import { HybridForm as ExampleHybridForm } from "./examples/HybridForm";
@@ -25,6 +26,7 @@ export default {
   "examples/CodeBlock": CodeBlock,
   "examples/Context": ExampleContext,
   "examples/Counter": ExampleCounter,
+  "examples/Encoder": ExampleEncoder,
   "examples/Events": ExampleEvents,
   "examples/FileUpload": ExampleFileUpload,
   "examples/HybridForm": ExampleHybridForm,

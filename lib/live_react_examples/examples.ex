@@ -122,6 +122,17 @@ defmodule LiveReactExamples.Examples do
           react_ext: "jsx",
           features: ["assign_async", "AsyncResult encoder"],
           status: :ready
+        },
+        %{
+          id: "encoder",
+          title: "Custom Encoder",
+          description: "@derive decides what a struct sends to the client, and what it doesn't",
+          icon: "hero-lock-closed",
+          kind: :live,
+          module: "Encoder",
+          react_ext: "jsx",
+          features: ["@derive LiveReact.Encoder", "except:"],
+          status: :ready
         }
       ]
     },
