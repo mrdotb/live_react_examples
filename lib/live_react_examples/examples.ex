@@ -72,7 +72,7 @@ defmodule LiveReactExamples.Examples do
           module: "Events",
           react_ext: "jsx",
           features: ["useLiveReact", "pushEvent"],
-          status: :planned
+          status: :ready
         },
         %{
           id: "server-events",

@@ -5,6 +5,7 @@ import { Context } from "./context";
 import { Counter } from "./counter";
 import { CodeBlock } from "./examples/CodeBlock";
 import { Counter as ExampleCounter } from "./examples/Counter";
+import { Events as ExampleEvents } from "./examples/Events";
 import { Simple as ExampleSimple } from "./examples/Simple";
 import { SimpleProps as ExampleSimpleProps } from "./examples/SimpleProps";
 import { DelaySlider } from "./delay-slider";
@@ -29,6 +30,7 @@ export default {
   DelaySlider,
   "examples/CodeBlock": CodeBlock,
   "examples/Counter": ExampleCounter,
+  "examples/Events": ExampleEvents,
   "examples/Lazy": ExampleLazy,
   "examples/Simple": ExampleSimple,
   "examples/SimpleProps": ExampleSimpleProps,
