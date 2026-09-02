@@ -77,7 +77,7 @@ defmodule LiveReactExamplesWeb.SiteComponents do
 
         <nav class="flex items-center gap-2 text-sm">
           <.link
-            href={~p"/simple"}
+            href={~p"/examples"}
             class="rounded-md px-3 py-1.5 text-[color:var(--text-muted)] hover:text-[color:var(--text)]"
           >
             Examples

@@ -39,7 +39,7 @@ defmodule LiveReactExamplesWeb.SiteComponentsTest do
   test "site_header carries the primary nav and the toggle" do
     html = render_component(&site_header/1, %{})
 
-    assert html =~ ~s(href="/simple")
+    assert html =~ ~s(href="/examples")
     assert html =~ "Examples"
     assert html =~ "hexdocs.pm/live_react"
     assert html =~ "Docs"
