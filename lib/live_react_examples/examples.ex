@@ -131,7 +131,7 @@ defmodule LiveReactExamples.Examples do
           module: "Link",
           react_ext: "jsx",
           features: ["Link", "patch", "navigate"],
-          status: :planned
+          status: :ready
         },
         %{
           id: "link-demo",
