@@ -8,6 +8,12 @@ defmodule LiveReactExamplesWeb.Examples.ExamplePageTest do
 
   test "defaults to the preview tab", %{conn: conn} do
     html = conn |> get(~p"/examples/counter") |> html_response(200)
+
+    # Not just `"Key concepts"`: that section renders unconditionally
+    # regardless of which tab is active, so it says nothing about the
+    # default. The preview container only renders when the active tab is
+    # "preview" — that's the thing actually under test here.
+    assert html =~ "counter-preview"
     assert html =~ "Key concepts"
     refute html =~ "MyAppWeb.CounterLive"
   end
@@ -33,7 +39,14 @@ defmodule LiveReactExamplesWeb.Examples.ExamplePageTest do
 
   test "the macro sets a page title from the registry", %{conn: conn} do
     html = conn |> get(~p"/examples/counter") |> html_response(200)
-    assert html =~ "Counter"
+
+    # Not `assert html =~ "Counter"`: `@example.title` is "Counter" and
+    # `example_page/1` renders it independently in the page's `<h1>`, so that
+    # assertion passes whether or not `page_title` is wired at all. Assert on
+    # the actual `<title>` element, which only carries this content because
+    # `mount/3` assigns `page_title`.
+    [title] = Regex.run(~r{<title[^>]*>(.*?)</title>}s, html, capture: :all_but_first)
+    assert title =~ "Counter · LiveReact examples"
   end
 
   test "using the macro with an unknown slug fails at compile time" do

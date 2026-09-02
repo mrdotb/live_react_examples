@@ -41,7 +41,6 @@ defmodule LiveReactExamplesWeb.PageController do
 
     conn
     |> put_layout(false)
-    |> put_root_layout(html: {LiveReactExamplesWeb.Layouts, :root})
     |> render(:raw_example, preview_module: module)
   end
 end
