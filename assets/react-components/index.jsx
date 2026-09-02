@@ -8,6 +8,7 @@ import { Events as ExampleEvents } from "./examples/Events";
 import { HybridForm as ExampleHybridForm } from "./examples/HybridForm";
 import { LinkExample } from "./examples/Link";
 import { LinkDemo as ExampleLinkDemo } from "./examples/LinkDemo";
+import { PropsDiffing as ExamplePropsDiffing } from "./examples/PropsDiffing";
 import { ServerEvents as ExampleServerEvents } from "./examples/ServerEvents";
 import { Simple as ExampleSimple } from "./examples/Simple";
 import { SimpleProps as ExampleSimpleProps } from "./examples/SimpleProps";
@@ -26,6 +27,7 @@ export default {
   "examples/Lazy": ExampleLazy,
   "examples/Link": LinkExample,
   "examples/LinkDemo": ExampleLinkDemo,
+  "examples/PropsDiffing": ExamplePropsDiffing,
   "examples/ServerEvents": ExampleServerEvents,
   "examples/Simple": ExampleSimple,
   "examples/SimpleProps": ExampleSimpleProps,

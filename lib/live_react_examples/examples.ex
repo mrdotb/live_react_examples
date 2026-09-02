@@ -100,6 +100,17 @@ defmodule LiveReactExamples.Examples do
           react_ext: "jsx",
           features: ["stream/4", "__dom_id"],
           status: :ready
+        },
+        %{
+          id: "props-diffing",
+          title: "Props Diffing",
+          description: "Only the changed path travels, unless a component opts out",
+          icon: "hero-arrows-pointing-in",
+          kind: :live,
+          module: "PropsDiffing",
+          react_ext: "jsx",
+          features: ["data-props-diff", "diff={false}"],
+          status: :ready
         }
       ]
     },
