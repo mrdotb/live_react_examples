@@ -25,6 +25,20 @@ defmodule LiveReactExamplesWeb.Endpoint do
     gzip: false,
     only: LiveReactExamplesWeb.static_paths()
 
+  # Tidewave exposes an MCP endpoint against the running dev server, so tools
+  # can evaluate code, inspect logs and query the app rather than inferring
+  # from source. Dev only.
+  #
+  # Placement is load-bearing: it must come BEFORE the code_reloading? block
+  # and before Plug.Parsers, because Tidewave reads the raw request body and
+  # raises if the body has already been parsed.
+  #
+  # The team token is committed intentionally — it identifies the team, and a
+  # new member is prompted to accept rather than being silently granted access.
+  if Mix.env() == :dev do
+    plug Tidewave, team: [id: "dotbio", token: "lsbg5oi3bkbeodzpsqzsrgr676v3p7weo3zvkla"]
+  end
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
@@ -44,5 +58,6 @@ defmodule LiveReactExamplesWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+
   plug LiveReactExamplesWeb.Router
 end
