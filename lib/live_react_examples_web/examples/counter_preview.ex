@@ -6,7 +6,6 @@ defmodule LiveReactExamplesWeb.Examples.CounterPreview do
   use LiveReactExamplesWeb, :live_view
 
   def mount(_params, _session, socket) do
-    socket = detach_hook(socket, :active_tab, :handle_params)
     {:ok, assign(socket, :count, 0), layout: false}
   end
 
