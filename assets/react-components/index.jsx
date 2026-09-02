@@ -1,8 +1,6 @@
 // polyfill recommended by Vite https://vitejs.dev/config/build-options#build-modulepreload
 import "vite/modulepreload-polyfill";
 
-import { Context } from "./context";
-import { Counter } from "./counter";
 import { CodeBlock } from "./examples/CodeBlock";
 import { Context as ExampleContext } from "./examples/Context";
 import { Counter as ExampleCounter } from "./examples/Counter";
@@ -16,26 +14,10 @@ import { SimpleProps as ExampleSimpleProps } from "./examples/SimpleProps";
 import { Slots as ExampleSlots } from "./examples/Slots";
 import { SSR as ExampleSSR } from "./examples/SSR";
 import { Streams as ExampleStreams } from "./examples/Streams";
-import { DelaySlider } from "./delay-slider";
-import { FlashSonner } from "./flash-sonner";
-import { GithubCode } from "./github-code";
-import { Lazy } from "./lazy";
 import { Lazy as ExampleLazy } from "./examples/Lazy";
-import { Link } from "./link";
-import { LinkExample } from "./link-example";
-import { LogList } from "./log-list";
-import { SSR } from "./ssr";
-import { Simple } from "./simple";
-import { SimpleProps } from "./simple-props";
-import { Slot } from "./slot";
-import { StreamDemo } from "./stream-demo";
-import { Typescript } from "./typescript";
 import { Typescript as ExampleTypescript } from "./examples/Typescript";
 
 export default {
-  Context,
-  Counter,
-  DelaySlider,
   "examples/CodeBlock": CodeBlock,
   "examples/Context": ExampleContext,
   "examples/Counter": ExampleCounter,
@@ -51,16 +33,4 @@ export default {
   "examples/SSR": ExampleSSR,
   "examples/Streams": ExampleStreams,
   "examples/Typescript": ExampleTypescript,
-  FlashSonner,
-  GithubCode,
-  Lazy,
-  Link,
-  LinkExample,
-  LogList,
-  SSR,
-  Simple,
-  SimpleProps,
-  Slot,
-  StreamDemo,
-  Typescript,
 };

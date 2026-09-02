@@ -53,7 +53,6 @@ defmodule LiveReactExamplesWeb do
       use Phoenix.LiveView,
         layout: {LiveReactExamplesWeb.Layouts, :app}
 
-      on_mount LiveReactExamplesWeb.LiveDemoAssigns
       unquote(html_helpers())
     end
   end

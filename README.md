@@ -4,29 +4,31 @@ The demo application for [LiveReact](https://github.com/mrdotb/live_react) — R
 components inside Phoenix LiveView, with SSR, end-to-end reactivity and slot
 interoperability.
 
-Live demo: <https://live-react.mrdotb.com/simple>
+Live demo: <https://live-react.mrdotb.com>
 
 ## What's in here
 
-A Phoenix app whose routes are each a self-contained example:
+A Phoenix app whose examples each live at `/examples/<slug>`:
 
 | Route | Shows |
 | --- | --- |
-| `/simple`, `/simple-props` | Rendering a React component from a dead view |
-| `/typescript` | TypeScript components |
-| `/lazy` | Lazy-loading a component |
-| `/live-counter` | `pushEvent` / assigns round-trip |
-| `/context` | Sharing LiveView state through React context |
-| `/log-list` | Streaming updates into a component |
-| `/flash-sonner` | Server events driving a client toast library |
-| `/ssr` | Server-side rendering |
-| `/hybrid-form` | A form split between LiveView and React |
-| `/slot` | Phoenix slots as React children |
-| `/link-demo`, `/link-usage` | The `Link` component for LiveView navigation |
-| `/stream-demo` | Phoenix streams (insert, replace, edit, delete) |
+| `/examples/simple`, `/examples/simple-props` | Rendering a React component from a dead view |
+| `/examples/typescript` | TypeScript components |
+| `/examples/lazy` | Lazy-loading a component |
+| `/examples/counter` | `pushEvent` / assigns round-trip |
+| `/examples/context` | Sharing LiveView state through React context |
+| `/examples/events` | Streaming updates into a component |
+| `/examples/server-events` | Server events driving a client toast library |
+| `/examples/ssr` | Server-side rendering |
+| `/examples/hybrid-form` | A form split between LiveView and React |
+| `/examples/slots` | Phoenix slots as React children |
+| `/examples/link-demo`, `/examples/link` | The `Link` component for LiveView navigation |
+| `/examples/streams` | Phoenix streams (insert, replace, edit, delete) |
 
-The React components live in `assets/react-components/`, and each one is paired
-with a LiveView or controller action under `lib/live_react_examples_web/`.
+Each example page offers Preview / LiveView / React tabs. The React components
+live in `assets/react-components/examples/`, paired with a LiveView (or
+controller action, for the dead-view examples) under
+`lib/live_react_examples_web/examples/`.
 
 ## Running it
 
