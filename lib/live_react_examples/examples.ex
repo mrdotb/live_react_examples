@@ -111,6 +111,17 @@ defmodule LiveReactExamples.Examples do
           react_ext: "jsx",
           features: ["data-props-diff", "diff={false}"],
           status: :ready
+        },
+        %{
+          id: "async",
+          title: "Async Assigns",
+          description: "assign_async's AsyncResult reaches React as loading, ok and failed",
+          icon: "hero-arrow-path",
+          kind: :live,
+          module: "Async",
+          react_ext: "jsx",
+          features: ["assign_async", "AsyncResult encoder"],
+          status: :ready
         }
       ]
     },

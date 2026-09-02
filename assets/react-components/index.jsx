@@ -1,6 +1,7 @@
 // polyfill recommended by Vite https://vitejs.dev/config/build-options#build-modulepreload
 import "vite/modulepreload-polyfill";
 
+import { Async as ExampleAsync } from "./examples/Async";
 import { CodeBlock } from "./examples/CodeBlock";
 import { Context as ExampleContext } from "./examples/Context";
 import { Counter as ExampleCounter } from "./examples/Counter";
@@ -20,6 +21,7 @@ import { Lazy as ExampleLazy } from "./examples/Lazy";
 import { Typescript as ExampleTypescript } from "./examples/Typescript";
 
 export default {
+  "examples/Async": ExampleAsync,
   "examples/CodeBlock": CodeBlock,
   "examples/Context": ExampleContext,
   "examples/Counter": ExampleCounter,
